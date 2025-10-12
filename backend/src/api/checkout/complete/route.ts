@@ -1,78 +1,48 @@
-// backend/src/api/checkout/complete/route.ts
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+// storefront/src/app/api/checkout/complete/route.ts
+import { NextRequest, NextResponse } from "next/server"
 
-export async function GET(
-  req: MedusaRequest,
-  res: MedusaResponse
-): Promise<void> {
-  const { cart_id, session_id } = req.query
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams
+  const cartId = searchParams.get("cart_id")
 
-  if (!cart_id || typeof cart_id !== "string") {
-    const redirectUrl = process.env.STOREFRONT_URL 
-      ? `${process.env.STOREFRONT_URL}/checkout?step=payment&error=no_cart_id`
-      : "http://localhost:8000/checkout?step=payment&error=no_cart_id"
-    
-    return res.redirect(redirectUrl)
+  if (!cartId) {
+    return NextResponse.redirect(
+      new URL("/checkout?step=payment&error=no_cart_id", request.url)
+    )
   }
 
   try {
-    // Opcjonalnie: Zweryfikuj sesję Stripe
-    if (session_id && typeof session_id === "string") {
-      const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
-      const session = await stripe.checkout.sessions.retrieve(session_id)
-      
-      if (session.payment_status !== "paid") {
-        throw new Error("Payment not completed")
+    // Finalizuj zamówienie w Medusa
+    const completeResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/carts/${cartId}/complete`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    }
-
-    // Pobierz query z kontenera
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
-
-    // Pobierz koszyk
-    const { data: carts } = await query.graph({
-      entity: "cart",
-      fields: ["id", "region_id"],
-      filters: { id: cart_id },
-    })
-
-    const cart = carts?.[0]
-
-    if (!cart) {
-      throw new Error("Cart not found")
-    }
-
-    // Finalizuj zamówienie używając workflow
-    const { completeCartWorkflow } = await import(
-      "@medusajs/medusa/core-flows"
     )
 
-    const { result } = await completeCartWorkflow(req.scope).run({
-      input: { id: cart_id },
-    })
+    if (!completeResponse.ok) {
+      const errorData = await completeResponse.json().catch(() => ({}))
+      console.error("Failed to complete order:", errorData)
+      throw new Error("Failed to complete order")
+    }
 
-    const order = result
+    const data = await completeResponse.json()
 
-    if (!order || !order.id) {
-      throw new Error("Order creation failed")
+    if (!data.order || !data.order.id) {
+      throw new Error("Order data missing")
     }
 
     // Przekieruj do strony potwierdzenia
-    const locale = "pl" // lub pobierz z cart.region
-    const redirectUrl = process.env.STOREFRONT_URL 
-      ? `${process.env.STOREFRONT_URL}/${locale}/order/confirmed/${order.id}`
-      : `http://localhost:8000/${locale}/order/confirmed/${order.id}`
-    
-    return res.redirect(redirectUrl)
-
+    return NextResponse.redirect(
+      new URL(`/pl/order/confirmed/${data.order.id}`, request.url)
+    )
   } catch (error) {
     console.error("Error completing checkout:", error)
-    
-    const redirectUrl = process.env.STOREFRONT_URL 
-      ? `${process.env.STOREFRONT_URL}/checkout?step=payment&error=payment_failed`
-      : "http://localhost:8000/checkout?step=payment&error=payment_failed"
-    
-    return res.redirect(redirectUrl)
+    return NextResponse.redirect(
+      new URL("/checkout?step=payment&error=payment_failed", request.url)
+    )
   }
 }
