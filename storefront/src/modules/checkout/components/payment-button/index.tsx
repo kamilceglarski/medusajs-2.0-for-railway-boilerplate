@@ -1,301 +1,180 @@
 "use client"
 
-import { Button } from "@medusajs/ui"
-import { OnApproveActions, OnApproveData } from "@paypal/paypal-js"
-import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
-import { useElements, useStripe } from "@stripe/react-stripe-js"
-import React, { useState } from "react"
-import ErrorMessage from "../error-message"
-import Spinner from "@modules/common/icons/spinner"
-import { placeOrder } from "@lib/data/cart"
-import { HttpTypes } from "@medusajs/types"
-import { isManual, isPaypal, isStripe } from "@lib/constants"
+import { useState, useEffect } from "react"
+import { Button, Heading, Text, clx } from "@medusajs/ui"
+import { CheckCircleSolid } from "@medusajs/icons"
+import { useRouter, useSearchParams, usePathname } from "next/navigation"
+import Divider from "@modules/common/components/divider"
+import ErrorMessage from "@modules/checkout/components/error-message"
 
-type PaymentButtonProps = {
-  cart: HttpTypes.StoreCart
-  "data-testid": string
-}
+const Payment = ({ cart }: { cart: any }) => {
+  const [loading, setLoading] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [paymentCompleted, setPaymentCompleted] = useState(false)
 
-const PaymentButton: React.FC<PaymentButtonProps> = ({
-  cart,
-  "data-testid": dataTestId,
-}) => {
-  const notReady =
-    !cart ||
-    !cart.shipping_address ||
-    !cart.billing_address ||
-    !cart.email ||
-    (cart.shipping_methods?.length ?? 0) < 1
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
 
-  // TODO: Add this once gift cards are implemented
-  // const paidByGiftcard =
-  //   cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
+  const isOpen = searchParams.get("step") === "payment"
 
-  // if (paidByGiftcard) {
-  //   return <GiftCardPaymentButton />
-  // }
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-  const paymentSession = cart.payment_collection?.payment_sessions?.[0]
+  useEffect(() => {
+    setError(null)
+  }, [isOpen])
 
-  switch (true) {
-    case isStripe(paymentSession?.provider_id):
-      return (
-        <StripePaymentButton
-          notReady={notReady}
-          cart={cart}
-          data-testid={dataTestId}
-        />
-      )
-    case isManual(paymentSession?.provider_id):
-      return (
-        <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
-      )
-    case isPaypal(paymentSession?.provider_id):
-      return (
-        <PayPalPaymentButton
-          notReady={notReady}
-          cart={cart}
-          data-testid={dataTestId}
-        />
-      )
-    default:
-      return <Button disabled>Select a payment method</Button>
-  }
-}
+  if (!mounted) return null
 
-const GiftCardPaymentButton = () => {
-  const [submitting, setSubmitting] = useState(false)
-
-  const handleOrder = async () => {
-    setSubmitting(true)
-    await placeOrder()
+  const handleEdit = () => {
+    router.push(pathname + "?step=payment", { scroll: false })
   }
 
-  return (
-    <Button
-      onClick={handleOrder}
-      isLoading={submitting}
-      data-testid="submit-order-button"
-    >
-      Place order
-    </Button>
-  )
-}
+  const handleStripeCheckout = async () => {
+    try {
+      setLoading(true)
+      setError(null)
 
-const StripePaymentButton = ({
-  cart,
-  notReady,
-  "data-testid": dataTestId,
-}: {
-  cart: HttpTypes.StoreCart
-  notReady: boolean
-  "data-testid"?: string
-}) => {
-  const [submitting, setSubmitting] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+      if (!cart?.id) {
+        throw new Error("Brak ID koszyka")
+      }
 
-  const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
-  }
+      if (!cart?.items || cart.items.length === 0) {
+        throw new Error("Koszyk jest pusty")
+      }
 
-  const stripe = useStripe()
-  const elements = useElements()
-  const card = elements?.getElement("card")
+      const payload = {
+        cart_id: cart.id,
+        items: cart.items,
+        currency_code: cart.region?.currency_code || cart.currency_code || "pln",
+      }
 
-  const session = cart.payment_collection?.payment_sessions?.find(
-    (s) => s.status === "pending"
-  )
-
-  const disabled = !stripe || !elements ? true : false
-
-  const handlePayment = async () => {
-    setSubmitting(true)
-
-    if (!stripe || !elements || !card || !cart) {
-      setSubmitting(false)
-      return
-    }
-
-    await stripe
-      .confirmCardPayment(session?.data.client_secret as string, {
-        payment_method: {
-          card: card,
-          billing_details: {
-            name:
-              cart.billing_address?.first_name +
-              " " +
-              cart.billing_address?.last_name,
-            address: {
-              city: cart.billing_address?.city ?? undefined,
-              country: cart.billing_address?.country_code ?? undefined,
-              line1: cart.billing_address?.address_1 ?? undefined,
-              line2: cart.billing_address?.address_2 ?? undefined,
-              postal_code: cart.billing_address?.postal_code ?? undefined,
-              state: cart.billing_address?.province ?? undefined,
-            },
-            email: cart.email,
-            phone: cart.billing_address?.phone ?? undefined,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/custom`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
           },
-        },
-      })
-      .then(({ error, paymentIntent }) => {
-        if (error) {
-          const pi = error.payment_intent
-
-          if (
-            (pi && pi.status === "requires_capture") ||
-            (pi && pi.status === "succeeded")
-          ) {
-            onPaymentCompleted()
-          }
-
-          setErrorMessage(error.message || null)
-          return
+          body: JSON.stringify(payload),
         }
+      )
 
-        if (
-          (paymentIntent && paymentIntent.status === "requires_capture") ||
-          paymentIntent.status === "succeeded"
-        ) {
-          return onPaymentCompleted()
-        }
+      const data = await response.json()
 
-        return
-      })
+      if (!response.ok) {
+        throw new Error(data.message || "Błąd tworzenia sesji Stripe")
+      }
+
+      if (!data.url) {
+        throw new Error("Brak URL do przekierowania")
+      }
+
+      // Przekierowanie do Stripe Checkout
+      window.location.href = data.url
+    } catch (err: any) {
+      console.error("Checkout error:", err)
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <>
-      <Button
-        disabled={disabled || notReady}
-        onClick={handlePayment}
-        size="large"
-        isLoading={submitting}
-        data-testid={dataTestId}
-      >
-        Place order
-      </Button>
-      <ErrorMessage
-        error={errorMessage}
-        data-testid="stripe-payment-error-message"
-      />
-    </>
+    <div className="bg-white">
+      <div className="flex flex-row items-center justify-between mb-6">
+        <Heading
+          level="h2"
+          className={clx(
+            "flex flex-row text-3xl-regular gap-x-2 items-baseline",
+            {
+              "opacity-50 pointer-events-none select-none":
+                !isOpen && !paymentCompleted,
+            }
+          )}
+        >
+          Payment
+          {!isOpen && paymentCompleted && <CheckCircleSolid />}
+        </Heading>
+        {!isOpen && paymentCompleted && (
+          <Text>
+            <button
+              onClick={handleEdit}
+              className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
+              data-testid="edit-payment-button"
+            >
+              Edit
+            </button>
+          </Text>
+        )}
+      </div>
+
+      {isOpen ? (
+        <div data-testid="payment-container">
+          <div className="pb-8">
+            <Text className="txt-medium-plus text-ui-fg-base mb-4">
+              Choose your payment method
+            </Text>
+
+            <div className="flex flex-col gap-y-2">
+              <div
+                className="flex items-center justify-between text-small-regular cursor-pointer py-4 border rounded-rounded px-8 hover:shadow-borders-interactive-with-active border-ui-border-interactive"
+                onClick={handleStripeCheckout}
+              >
+                <div className="flex items-center gap-x-4">
+                  <div className="w-5 h-5 rounded-full border-2 border-ui-border-interactive flex items-center justify-center">
+                    <div className="w-2.5 h-2.5 rounded-full bg-ui-fg-interactive"></div>
+                  </div>
+                  <span className="text-base-regular">
+                    Credit/Debit Card, BLIK, P24
+                  </span>
+                </div>
+                <span className="justify-self-end text-ui-fg-subtle text-small-regular">
+                  via Stripe
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <ErrorMessage
+            error={error}
+            data-testid="payment-error-message"
+          />
+
+          <Button
+            size="large"
+            className="mt-6"
+            onClick={handleStripeCheckout}
+            isLoading={loading}
+            disabled={!cart?.items || cart.items.length === 0}
+            data-testid="submit-payment-button"
+          >
+            Continue to Stripe
+          </Button>
+        </div>
+      ) : (
+        <div>
+          <div className="text-small-regular">
+            {paymentCompleted && (
+              <div className="flex flex-col w-1/3">
+                <Text className="txt-medium-plus text-ui-fg-base mb-1">
+                  Method
+                </Text>
+                <Text className="txt-medium text-ui-fg-subtle">
+                  Stripe Payment
+                </Text>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      <Divider className="mt-8" />
+    </div>
   )
 }
 
-const PayPalPaymentButton = ({
-  cart,
-  notReady,
-  "data-testid": dataTestId,
-}: {
-  cart: HttpTypes.StoreCart
-  notReady: boolean
-  "data-testid"?: string
-}) => {
-  const [submitting, setSubmitting] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-  const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
-  }
-
-  const session = cart.payment_collection?.payment_sessions?.find(
-    (s) => s.status === "pending"
-  )
-
-  const handlePayment = async (
-    _data: OnApproveData,
-    actions: OnApproveActions
-  ) => {
-    actions?.order
-      ?.authorize()
-      .then((authorization) => {
-        if (authorization.status !== "COMPLETED") {
-          setErrorMessage(`An error occurred, status: ${authorization.status}`)
-          return
-        }
-        onPaymentCompleted()
-      })
-      .catch(() => {
-        setErrorMessage(`An unknown error occurred, please try again.`)
-        setSubmitting(false)
-      })
-  }
-
-  const [{ isPending, isResolved }] = usePayPalScriptReducer()
-
-  if (isPending) {
-    return <Spinner />
-  }
-
-  if (isResolved) {
-    return (
-      <>
-        <PayPalButtons
-          style={{ layout: "horizontal" }}
-          createOrder={async () => session?.data.id as string}
-          onApprove={handlePayment}
-          disabled={notReady || submitting || isPending}
-          data-testid={dataTestId}
-        />
-        <ErrorMessage
-          error={errorMessage}
-          data-testid="paypal-payment-error-message"
-        />
-      </>
-    )
-  }
-}
-
-const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
-  const [submitting, setSubmitting] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-  const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
-  }
-
-  const handlePayment = () => {
-    setSubmitting(true)
-
-    onPaymentCompleted()
-  }
-
-  return (
-    <>
-      <Button
-        disabled={notReady}
-        isLoading={submitting}
-        onClick={handlePayment}
-        size="large"
-        data-testid="submit-order-button"
-      >
-        Place order
-      </Button>
-      <ErrorMessage
-        error={errorMessage}
-        data-testid="manual-payment-error-message"
-      />
-    </>
-  )
-}
-
-export default PaymentButton
+export default Payment
