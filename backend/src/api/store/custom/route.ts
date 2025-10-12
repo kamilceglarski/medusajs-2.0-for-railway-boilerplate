@@ -48,7 +48,7 @@ export async function POST(
           name: item.variant?.product?.title || item.title || "Product",
           description: item.variant?.title || "",
         },
-        unit_amount: Math.round(item.unit_price),
+        unit_amount: Math.round(item.unit_price * 100),
       },
       quantity: item.quantity,
     }))
@@ -68,13 +68,11 @@ export async function POST(
     }
 
     // 3. Utwórz sesję Stripe - przekierowanie do endpointu finalizującego
-    const successUrl = process.env.STOREFRONT_URL 
-      ? `${process.env.STOREFRONT_URL}/api/checkout/complete?cart_id=${cart_id}&session_id={CHECKOUT_SESSION_ID}`
-      : `http://localhost:8000/api/checkout/complete?cart_id=${cart_id}&session_id={CHECKOUT_SESSION_ID}`
-
+    const backendUrl = process.env.MEDUSA_BACKEND_URL || "http://localhost:9000"
+    const successUrl = `${backendUrl}/checkout/complete?cart_id=${cart_id}&session_id={CHECKOUT_SESSION_ID}`
     const cancelUrl = process.env.STOREFRONT_URL 
-      ? `${process.env.STOREFRONT_URL}/checkout?step=payment`
-      : `http://localhost:8000/checkout?step=payment`
+      ? `${process.env.STOREFRONT_URL}/pl/checkout?step=payment`
+      : `http://localhost:8000/pl/checkout?step=payment`
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card", "blik", "p24"],
