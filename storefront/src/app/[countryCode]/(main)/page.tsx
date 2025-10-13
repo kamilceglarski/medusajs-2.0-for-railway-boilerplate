@@ -11,9 +11,9 @@ import Services from "@modules/home/components/services"
 
 
 export const metadata: Metadata = {
-  title: "Medusa Next.js Starter Template",
+  title: "Lumoria Studio",
   description:
-    "A performant frontend ecommerce starter template with Next.js 14 and Medusa.",
+    "Lumoria Studio - Grawer i dekoracje ze sklejki",
 }
 
 export default async function Home({
@@ -31,7 +31,7 @@ export default async function Home({
   return (
     <>
       <Hero />
-      <FeaturedCategories /> 
+      <FeaturedCategories />
       <Services />
       <TestimonialsSlider />
 

@@ -9,6 +9,7 @@ import PaginatedProducts from "@modules/store/templates/paginated-products"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
 import { listCategories } from "@lib/data/categories"
+import CategoriesFilter from "@modules/store/components/refinement-list/categories-filter"
 
 export default function CategoryTemplate({
   categories,
@@ -39,7 +40,7 @@ export default function CategoryTemplate({
       <div className="small:min-w-[250px] small:ml-[1.675rem]">
         <RefinementList sortBy={sort} data-testid="sort-by-container" />
         <Suspense fallback={null}>
-          <AllCategoriesList fetcher={categoriesPromise} countryCode={countryCode} />
+          <AllCategoriesFilterLoader fetcher={categoriesPromise} countryCode={countryCode} selectedHandle={category.handle} />
         </Suspense>
       </div>
       <div className="w-full">
@@ -90,25 +91,15 @@ export default function CategoryTemplate({
   )
 }
 
-async function AllCategoriesList({ fetcher, countryCode }: { fetcher: ReturnType<typeof listCategories>, countryCode: string }) {
+async function AllCategoriesFilterLoader({ fetcher, countryCode, selectedHandle }: { fetcher: ReturnType<typeof listCategories>, countryCode: string, selectedHandle: string }) {
   const categories = await fetcher
   if (!categories || categories.length === 0) return null
 
   return (
-    <div className="mt-4">
-      <h3 className="txt-small-plus text-ui-fg-subtle mb-2">Kategorie</h3>
-      <ul className="flex flex-col gap-1">
-        {categories.map((cat: any) => (
-          <li key={cat.id}>
-            <a
-              href={`/${countryCode}/categories/${encodeURIComponent(cat.handle)}`}
-              className="block py-1 px-0 text-ui-fg-subtle hover:text-ui-fg-base"
-            >
-              {cat.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <CategoriesFilter
+      categories={categories}
+      countryCode={countryCode}
+      selectedHandle={selectedHandle}
+    />
   )
 }

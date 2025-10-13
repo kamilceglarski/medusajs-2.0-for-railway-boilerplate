@@ -52,7 +52,7 @@ const Hero = () => {
       } catch (_e) {
         // Best-effort: keep muted and attempt again shortly
         setTimeout(() => {
-          el.play().catch(() => {})
+          el.play().catch(() => { })
         }, 300)
       }
     }

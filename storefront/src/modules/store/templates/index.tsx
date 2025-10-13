@@ -6,6 +6,7 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 
 import PaginatedProducts from "./paginated-products"
 import { listCategories } from "@lib/data/categories"
+import CategoriesFilter from "@modules/store/components/refinement-list/categories-filter"
 
 const StoreTemplate = ({
   sortBy,
@@ -28,9 +29,9 @@ const StoreTemplate = ({
     >
       <div className="small:min-w-[250px] small:ml-[1.675rem]">
         <RefinementList sortBy={sort} />
-        {/* Kategorie pod "Sortuj według" */}
+        {/* Kategorie w tym samym stylu co "Sortuj według" */}
         <Suspense fallback={null}>
-          <CategoriesList fetcher={categoriesPromise} countryCode={countryCode} />
+          <CategoriesFilterLoader fetcher={categoriesPromise} countryCode={countryCode} />
         </Suspense>
       </div>
       <div className="w-full">
@@ -51,26 +52,11 @@ const StoreTemplate = ({
 
 export default StoreTemplate
 
-// Async server component to render categories
-async function CategoriesList({ fetcher, countryCode }: { fetcher: ReturnType<typeof listCategories>, countryCode: string }) {
+// Server wrapper that feeds categories to a client filter in the same style as sorting
+async function CategoriesFilterLoader({ fetcher, countryCode }: { fetcher: ReturnType<typeof listCategories>, countryCode: string }) {
   const categories = await fetcher
   if (!categories || categories.length === 0) return null
 
-  return (
-    <div className="mt-4">
-      <h3 className="txt-small-plus text-ui-fg-subtle mb-2">Kategorie</h3>
-      <ul className="flex flex-col gap-1">
-        {categories.map((cat: any) => (
-          <li key={cat.id}>
-            <a
-              href={`/${countryCode}/categories/${encodeURIComponent(cat.handle)}`}
-              className="block py-1 px-0 text-ui-fg-subtle hover:text-ui-fg-base"
-            >
-              {cat.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  // No selection on the generic store page
+  return <CategoriesFilter categories={categories} countryCode={countryCode} />
 }

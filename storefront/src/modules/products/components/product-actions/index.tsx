@@ -140,6 +140,17 @@ export default function ProductActions({
             </div>
           )}
         </div>
+        {/* Optional notes for engraving / order */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm text-ui-fg-subtle">Uwagi do zamówienia (opcjonalnie)</label>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Np. treść graweru: Jan Kowalski, data 01.01.2025"
+            rows={3}
+            className="w-full rounded-md border border-ui-border-base p-3 bg-transparent outline-none resize-y"
+          />
+        </div>
 
         {/* Quantity selector (centered, above price) */}
         <div className="flex flex-col items-center gap-3">
@@ -162,7 +173,7 @@ export default function ProductActions({
               inputMode="numeric"
               pattern="[0-9]*"
               min={1}
-              max={99}
+              max={200}
               value={quantity}
               onChange={(e) => {
                 const raw = e.target.value
@@ -201,17 +212,6 @@ export default function ProductActions({
           </div>
         </div>
 
-        {/* Optional notes for engraving / order */}
-        <div className="flex flex-col gap-2">
-          <label className="text-sm text-ui-fg-subtle">Uwagi do zamówienia (opcjonalnie)</label>
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            placeholder="Np. treść graweru: Jan Kowalski, data 01.01.2025"
-            rows={3}
-            className="w-full rounded-md border border-ui-border-base p-3 bg-transparent outline-none resize-y"
-          />
-        </div>
 
         <ProductPrice product={product} variant={selectedVariant} />
 
@@ -226,8 +226,8 @@ export default function ProductActions({
           {!selectedVariant
             ? "Wybierz wariant"
             : !inStock
-            ? "Brak w magazynie"
-            : "Dodaj do koszyka"}
+              ? "Brak w magazynie"
+              : "Dodaj do koszyka"}
         </Button>
         <MobileActions
           product={product}
