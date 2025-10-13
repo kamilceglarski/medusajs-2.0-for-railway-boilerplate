@@ -25,7 +25,7 @@ export default async function Footer() {
             {product_categories && product_categories?.length > 0 && (
               <div className="flex flex-col gap-y-2">
                 <span className="txt-small-plus txt-ui-fg-base">
-                  Categories
+                  Kategorie
                 </span>
                 <ul
                   className="grid grid-cols-1 gap-2"
@@ -83,7 +83,7 @@ export default async function Footer() {
             {collections && collections.length > 0 && (
               <div className="flex flex-col gap-y-2">
                 <span className="txt-small-plus txt-ui-fg-base">
-                  Collections
+                  Kolekcje
                 </span>
                 <ul
                   className={clx(
@@ -126,7 +126,7 @@ export default async function Footer() {
                     rel="noreferrer"
                     className="hover:text-ui-fg-base"
                   >
-                    Documentation
+                    Dokumentacja
                   </a>
                 </li>
                 <li>
@@ -136,7 +136,7 @@ export default async function Footer() {
                     rel="noreferrer"
                     className="hover:text-ui-fg-base"
                   >
-                    Source code
+                    Kod źródłowy
                   </a>
                 </li>
               </ul>
@@ -145,7 +145,7 @@ export default async function Footer() {
         </div>
         <div className="flex w-full mb-16 justify-between text-ui-fg-muted">
           <Text className="txt-compact-small">
-            © {new Date().getFullYear()} Medusa Store. All rights reserved.
+            © {new Date().getFullYear()} Lumoria Studio. All rights reserved.
           </Text>
           <MedusaCTA />
         </div>

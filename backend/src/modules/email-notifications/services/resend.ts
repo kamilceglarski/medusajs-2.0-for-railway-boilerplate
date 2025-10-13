@@ -99,6 +99,7 @@ export class ResendNotificationService extends AbstractNotificationProviderServi
       this.logger_.log(
         `Successfully sent "${notification.template}" email to ${notification.to} via Resend`
       )
+      console.log(`Successfully sent "${notification.template}" email to ${notification.to} via Resend`)
       return {} // Return an empty object on success
     } catch (error) {
       const errorCode = error.code

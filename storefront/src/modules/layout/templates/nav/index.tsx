@@ -25,7 +25,7 @@ export default async function Nav() {
               className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
               data-testid="nav-store-link"
             >
-              Medusa Store
+              Lumoria Studio
             </LocalizedClientLink>
           </div>
 
@@ -38,7 +38,7 @@ export default async function Nav() {
                   scroll={false}
                   data-testid="nav-search-link"
                 >
-                  Search
+                  Szukaj
                 </LocalizedClientLink>
               )}
               <LocalizedClientLink
@@ -46,7 +46,7 @@ export default async function Nav() {
                 href="/account"
                 data-testid="nav-account-link"
               >
-                Account
+                Konto
               </LocalizedClientLink>
             </div>
             <Suspense
@@ -56,7 +56,7 @@ export default async function Nav() {
                   href="/cart"
                   data-testid="nav-cart-link"
                 >
-                  Cart (0)
+                  Koszyk (0)
                 </LocalizedClientLink>
               }
             >
