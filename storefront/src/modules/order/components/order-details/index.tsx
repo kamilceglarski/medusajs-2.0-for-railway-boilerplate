@@ -1,3 +1,5 @@
+
+
 import { HttpTypes } from "@medusajs/types"
 import { Text } from "@medusajs/ui"
 
@@ -13,6 +15,7 @@ const OrderDetails = ({ order, showStatus }: OrderDetailsProps) => {
     return formatted.slice(0, 1).toUpperCase() + formatted.slice(1)
   }
 
+  
   return (
     <div>
       <Text>

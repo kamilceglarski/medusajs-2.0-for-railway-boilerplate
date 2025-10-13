@@ -151,30 +151,7 @@ export async function GET(
 
     console.log("Order created successfully:", order.id)
 
-    // 5. Usuń koszyk po pomyślnym zamówieniu
-    console.log("Deleting cart...")
-    try {
-      const deleteResponse = await fetch(
-        `${backendUrl}/store/carts/${cart_id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            "x-publishable-api-key": publishableKey,
-          },
-        }
-      )
-
-      if (deleteResponse.ok) {
-        console.log("Cart deleted successfully")
-      } else {
-        console.log("Cart deletion failed (non-critical):", await deleteResponse.text())
-      }
-    } catch (deleteError) {
-      console.log("Cart deletion error (non-critical):", deleteError)
-    }
-
-    // 6. Przekieruj do strony potwierdzenia
+    // 5. Przekieruj do strony potwierdzenia
     const locale = "pl"
     const redirectUrl = process.env.STOREFRONT_URL 
       ? `${process.env.STOREFRONT_URL}/${locale}/order/confirmed/${order.id}`

@@ -1,3 +1,5 @@
+
+
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
 
@@ -6,6 +8,8 @@ type OrderSummaryProps = {
 }
 
 const OrderSummary = ({ order }: OrderSummaryProps) => {
+  
+
   const getAmount = (amount?: number | null) => {
     if (!amount) {
       return

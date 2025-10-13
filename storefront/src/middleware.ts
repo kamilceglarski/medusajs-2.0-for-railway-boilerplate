@@ -85,6 +85,58 @@ async function getCountryCode(
 }
 
 /**
+ * Check if cart is completed and clear cookie if needed
+ */
+async function checkAndCleanCompletedCart(
+  request: NextRequest,
+  response: NextResponse
+): Promise<NextResponse> {
+  const cartIdCookie = request.cookies.get("_medusa_cart_id")?.value
+
+  // Sprawdź tylko na ważnych stronach (checkout, cart)
+  const shouldCheck = 
+    request.nextUrl.pathname.includes('/checkout') ||
+    request.nextUrl.pathname.includes('/cart')
+
+  if (!cartIdCookie || !shouldCheck) {
+    return response
+  }
+
+  try {
+    // Sprawdź status koszyka
+    const cartResponse = await fetch(
+      `${BACKEND_URL}/store/carts/${cartIdCookie}`,
+      {
+        headers: {
+          'x-publishable-api-key': PUBLISHABLE_API_KEY || '',
+        },
+      }
+    )
+
+    if (cartResponse.ok) {
+      const { cart } = await cartResponse.json()
+      
+      // Jeśli koszyk jest completed, wyczyść cookie
+      if (cart?.completed_at) {
+        console.log('[Middleware] Completed cart detected, clearing cookie:', cartIdCookie)
+        response.cookies.delete('_medusa_cart_id')
+        response.cookies.delete('cart_id')
+      }
+    } else if (cartResponse.status === 404) {
+      // Koszyk nie istnieje, wyczyść cookie
+      console.log('[Middleware] Cart not found, clearing cookie:', cartIdCookie)
+      response.cookies.delete('_medusa_cart_id')
+      response.cookies.delete('cart_id')
+    }
+  } catch (error) {
+    console.error('[Middleware] Error checking cart status:', error)
+    // W przypadku błędu, kontynuuj normalnie
+  }
+
+  return response
+}
+
+/**
  * Middleware to handle region selection and onboarding status.
  */
 export async function middleware(request: NextRequest) {
@@ -108,7 +160,9 @@ export async function middleware(request: NextRequest) {
     (!isOnboarding || onboardingCookie) &&
     (!cartId || cartIdCookie)
   ) {
-    return NextResponse.next()
+    // Przed zwróceniem response, sprawdź czy cart nie jest completed
+    const response = NextResponse.next()
+    return await checkAndCleanCompletedCart(request, response)
   }
 
   const redirectPath =
@@ -138,7 +192,8 @@ export async function middleware(request: NextRequest) {
     response.cookies.set("_medusa_onboarding", "true", { maxAge: 60 * 60 * 24 })
   }
 
-  return response
+  // Sprawdź i wyczyść completed cart przed zwróceniem response
+  return await checkAndCleanCompletedCart(request, response)
 }
 
 export const config = {
