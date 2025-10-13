@@ -54,13 +54,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const description =
       product_categories[product_categories.length - 1].description ??
-      `${title} category.`
+      `${title} – grawerowanie laserowe i dekoracje ze sklejki.`
 
     return {
-      title: `${title} | Medusa Store`,
+      title: `${title} | Lumoria Studio`,
       description,
+      keywords: [title, "grawerowanie laserowe", "dekoracje ze sklejki", "personalizacja"],
       alternates: {
         canonical: `${params.category.join("/")}`,
+      },
+      openGraph: {
+        title: `${title} | Lumoria Studio`,
+        description,
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${title} | Lumoria Studio`,
+        description,
       },
     }
   } catch (error) {

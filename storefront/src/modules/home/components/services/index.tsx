@@ -13,21 +13,21 @@ const services: ServiceItem[] = [
     description:
       "Precyzyjne grawerowanie na metalach, drewnie i tworzywach. Idealne do personalizacji i oznaczeń.",
     imageSrc: "https://picsum.photos/seed/engrave/1200/800",
-    imageAlt: "Usługa grawerowania",
+    imageAlt: "Grawerowanie laserowe — usługi grawerskie i personalizacja",
   },
   {
     title: "Tabliczki znamionowe",
     description:
       "Projektujemy i wykonujemy trwałe tabliczki znamionowe z numerami seryjnymi i danymi technicznymi.",
     imageSrc: "https://picsum.photos/seed/nameplate/1200/800",
-    imageAlt: "Tabliczki znamionowe",
+    imageAlt: "Tabliczki znamionowe grawerowane — sklejka / metal",
   },
   {
     title: "Płytki PCB",
     description:
       "Prototypowanie i małoseryjna produkcja płytek PCB z kontrolą jakości i szybkim terminem realizacji.",
     imageSrc: "https://picsum.photos/seed/pcb/1200/800",
-    imageAlt: "Płytki PCB",
+    imageAlt: "Płytki PCB prototypowanie — precyzja i grawer opisów",
   },
 ]
 

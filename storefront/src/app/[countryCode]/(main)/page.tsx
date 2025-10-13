@@ -11,9 +11,28 @@ import Services from "@modules/home/components/services"
 
 
 export const metadata: Metadata = {
-  title: "Lumoria Studio",
+  title: "Grawerowanie laserowe | Dekoracje ze sklejki | Lumoria Studio",
   description:
-    "Lumoria Studio - Grawer i dekoracje ze sklejki",
+    "Lumoria Studio: grawerowanie laserowe, dekoracje i prezenty ze sklejki, personalizacja na zamówienie. Usługi grawerskie – Śląsk (Rybnik, Gliwice) i cała Polska.",
+  keywords: [
+    "grawerowanie laserowe", "usługi grawerskie", "precyzyjny grawer", "grawerowanie na zamówienie", "personalizacja laserowa",
+    "grawerowanie w sklejce", "cięcie laserem sklejka", "wycinanie ze sklejki", "tabliczki grawerowane sklejka",
+    "dekoracje ze sklejki", "prezenty grawerowane", "pamiątki grawerowane", "drewniane gadżety z grawerem",
+    "dekoracje ślubne sklejka", "podziękowania dla gości grawerowane", "winietki ślubne sklejka", "toppery na tort grawerowane",
+    "grawerowanie laserowe Śląsk", "dekoracje ze sklejki Śląsk", "usługi grawerskie Rybnik", "grawer Gliwice",
+  ],
+  openGraph: {
+    title: "Lumoria Studio – grawerowanie laserowe i dekoracje ze sklejki",
+    description:
+      "Grawer laserem, personalizacja, dekoracje i prezenty ze sklejki. Realizacja na Śląsku i w całej Polsce.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lumoria Studio – grawerowanie laserowe",
+    description:
+      "Precyzyjne grawerowanie laserowe i dekoracje ze sklejki. Personalizacja na zamówienie.",
+  },
 }
 
 export default async function Home({
@@ -33,6 +52,7 @@ export default async function Home({
       <Hero />
       <FeaturedCategories />
       <Services />
+
       <TestimonialsSlider />
 
     </>

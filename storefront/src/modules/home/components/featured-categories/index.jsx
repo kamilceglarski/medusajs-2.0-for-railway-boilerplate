@@ -45,7 +45,7 @@ const FeaturedCategories = () => {
               <div className="relative h-72 w-full overflow-hidden rounded-lg bg-gray-200">
                 <Image
                   src={category.imageUrl}
-                  alt={`Zdjęcie kategorii ${category.name}`}
+                  alt={`Kategorie: ${category.name} — grawerowanie laserowe i dekoracje ze sklejki`}
                   fill // Używamy 'fill' dla lepszego dopasowania
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
