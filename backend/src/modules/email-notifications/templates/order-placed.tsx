@@ -21,7 +21,7 @@ export const isOrderPlacedTemplateData = (data: any): data is OrderPlacedTemplat
 
 export const OrderPlacedTemplate: React.FC<OrderPlacedTemplateProps> & {
   PreviewProps: OrderPlacedPreviewProps
-} = ({ order, shippingAddress, preview = 'Your order has been placed!' }) => {
+} = ({ order, shippingAddress, preview = 'Lumoria-studio.pl - Dziękuję za złożenie zamówienia!' }) => {
   return (
     <Base preview={preview}>
       <Section>

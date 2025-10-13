@@ -21,7 +21,7 @@ export default async function orderPlacedHandler({
       data: {
         emailOptions: {
           replyTo: 'info@example.com',
-          subject: 'Your order has been placed'
+          subject: 'Lumoria-studio.pl - Potwierdzenie zamówienia'
         },
         order,
         shippingAddress,

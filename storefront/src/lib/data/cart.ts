@@ -18,8 +18,15 @@ export async function retrieveCart() {
   }
 
   return await sdk.store.cart
-    .retrieve(cartId, {}, { next: { tags: ["cart"] }, ...getAuthHeaders() })
-    .then(({ cart }) => cart)
+    .retrieve(cartId, {})
+    .then(({ cart }) => {
+      // If the cart is completed, clear cookie so a fresh cart is generated next time
+      if ((cart as any)?.completed_at) {
+        removeCartId()
+        return null
+      }
+      return cart
+    })
     .catch(() => {
       return null
     })
@@ -137,7 +144,7 @@ export async function deleteLineItem(lineId: string) {
   }
 
   await sdk.store.cart
-    .deleteLineItem(cartId, lineId, getAuthHeaders())
+    .deleteLineItem(cartId, lineId, {}, getAuthHeaders())
     .then(() => {
       revalidateTag("cart")
     })
