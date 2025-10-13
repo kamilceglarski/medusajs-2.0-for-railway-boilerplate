@@ -43,8 +43,8 @@ const Item = ({ item, type = "full" }: ItemProps) => {
   }
 
   // TODO: Update this to grab the actual max inventory
-  const maxQtyFromInventory = 10
-  const maxQuantity = item.variant?.manage_inventory ? 10 : maxQtyFromInventory
+  const maxQtyFromInventory = 200
+  const maxQuantity = item.variant?.manage_inventory ? 200: maxQtyFromInventory
 
   return (
     <Table.Row className="w-full" data-testid="product-row">
@@ -87,7 +87,7 @@ const Item = ({ item, type = "full" }: ItemProps) => {
               {/* TODO: Update this with the v2 way of managing inventory */}
               {Array.from(
                 {
-                  length: Math.min(maxQuantity, 10),
+                  length: Math.min(maxQuantity, 200),
                 },
                 (_, i) => (
                   <option value={i + 1} key={i}>
