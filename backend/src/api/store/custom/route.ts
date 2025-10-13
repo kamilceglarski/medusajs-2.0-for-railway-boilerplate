@@ -3,9 +3,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import Stripe from "stripe"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 
-const stripe = new Stripe(process.env.STRIPE_API_KEY!, {
-  apiVersion: "2024-04-10",
-})
+const stripe = new Stripe(process.env.STRIPE_API_KEY!)
 
 export async function POST(
   req: MedusaRequest,
@@ -70,7 +68,7 @@ export async function POST(
     // 3. Utwórz sesję Stripe - przekierowanie do endpointu finalizującego
     const backendUrl = process.env.MEDUSA_BACKEND_URL || "http://localhost:9000"
     const successUrl = `${backendUrl}/checkout/complete?cart_id=${cart_id}&session_id={CHECKOUT_SESSION_ID}`
-    const cancelUrl = process.env.STOREFRONT_URL 
+    const cancelUrl = process.env.STOREFRONT_URL
       ? `${process.env.STOREFRONT_URL}/pl/checkout?step=payment`
       : `http://localhost:8000/pl/checkout?step=payment`
 
@@ -89,8 +87,8 @@ export async function POST(
     res.json({ url: session.url })
   } catch (error) {
     console.error("Stripe session error:", error)
-    res.status(500).json({ 
-      message: error instanceof Error ? error.message : "Internal server error" 
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Internal server error"
     })
   }
 }
