@@ -124,7 +124,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
 
       <Modal isOpen={state} close={close} data-testid="edit-address-modal">
         <Modal.Title>
-          <Heading className="mb-2">Edit address</Heading>
+          <Heading className="mb-2">Edytuj adres</Heading>
         </Modal.Title>
         <form action={formAction}>
           <Modal.Body>
@@ -225,9 +225,9 @@ const EditAddress: React.FC<EditAddressProps> = ({
                 className="h-10"
                 data-testid="cancel-button"
               >
-                Cancel
+                Anuluj
               </Button>
-              <SubmitButton data-testid="save-button">Save</SubmitButton>
+              <SubmitButton data-testid="save-button">Zapisz</SubmitButton>
             </div>
           </Modal.Footer>
         </form>
