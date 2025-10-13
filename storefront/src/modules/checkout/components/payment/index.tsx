@@ -104,7 +104,7 @@ const Payment = ({ cart }: { cart: any }) => {
             }
           )}
         >
-          Payment
+          Płatność
           
         </Heading>
         

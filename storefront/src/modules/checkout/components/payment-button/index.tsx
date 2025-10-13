@@ -97,7 +97,7 @@ const Payment = ({ cart }: { cart: any }) => {
             }
           )}
         >
-          Payment
+          Płatność
           {!isOpen && paymentCompleted && <CheckCircleSolid />}
         </Heading>
         {!isOpen && paymentCompleted && (
@@ -105,9 +105,9 @@ const Payment = ({ cart }: { cart: any }) => {
             <button
               onClick={handleEdit}
               className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
-              data-testid="edit-payment-button"
-            >
-              Edit
+                data-testid="edit-payment-button"
+              >
+                Edytuj
             </button>
           </Text>
         )}
@@ -117,7 +117,7 @@ const Payment = ({ cart }: { cart: any }) => {
         <div data-testid="payment-container">
           <div className="pb-8">
             <Text className="txt-medium-plus text-ui-fg-base mb-4">
-              Choose your payment method
+              Wybierz metodę płatności
             </Text>
 
             <div className="flex flex-col gap-y-2">

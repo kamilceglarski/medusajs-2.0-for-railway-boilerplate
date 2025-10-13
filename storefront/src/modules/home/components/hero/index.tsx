@@ -82,7 +82,7 @@ const Hero = () => {
         <div className="content-container">
           <div className="max-w-3xl">
             <h1 className="text-4xl small:text-5xl font-semibold tracking-tight text-white">
-              Grawer i dekoracje ze sklejki
+              Grawer i dekoracje ze sklejki <br />
               <span className="ml-2 text-ui-bg-base px-2 py-1 rounded bg-white/10">
                 {displayed}
                 <span className="animate-pulse">|</span>

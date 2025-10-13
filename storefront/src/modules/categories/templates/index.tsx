@@ -8,6 +8,7 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 import PaginatedProducts from "@modules/store/templates/paginated-products"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
+import { listCategories } from "@lib/data/categories"
 
 export default function CategoryTemplate({
   categories,
@@ -28,12 +29,19 @@ export default function CategoryTemplate({
 
   if (!category || !countryCode) notFound()
 
+  const categoriesPromise = listCategories()
+
   return (
     <div
       className="flex flex-col small:flex-row small:items-start py-6 content-container"
       data-testid="category-container"
     >
-      <RefinementList sortBy={sort} data-testid="sort-by-container" />
+      <div className="small:min-w-[250px] small:ml-[1.675rem]">
+        <RefinementList sortBy={sort} data-testid="sort-by-container" />
+        <Suspense fallback={null}>
+          <AllCategoriesList fetcher={categoriesPromise} countryCode={countryCode} />
+        </Suspense>
+      </div>
       <div className="w-full">
         <div className="flex flex-row mb-8 text-2xl-semi gap-4">
           {parents &&
@@ -78,6 +86,29 @@ export default function CategoryTemplate({
           />
         </Suspense>
       </div>
+    </div>
+  )
+}
+
+async function AllCategoriesList({ fetcher, countryCode }: { fetcher: ReturnType<typeof listCategories>, countryCode: string }) {
+  const categories = await fetcher
+  if (!categories || categories.length === 0) return null
+
+  return (
+    <div className="mt-4">
+      <h3 className="txt-small-plus text-ui-fg-subtle mb-2">Kategorie</h3>
+      <ul className="flex flex-col gap-1">
+        {categories.map((cat: any) => (
+          <li key={cat.id}>
+            <a
+              href={`/${countryCode}/categories/${encodeURIComponent(cat.handle)}`}
+              className="block py-1 px-0 text-ui-fg-subtle hover:text-ui-fg-base"
+            >
+              {cat.name}
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
