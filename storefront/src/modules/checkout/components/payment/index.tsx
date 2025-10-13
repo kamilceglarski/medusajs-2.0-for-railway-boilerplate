@@ -105,7 +105,7 @@ const Payment = ({ cart }: { cart: any }) => {
           )}
         >
           Payment
-          {!isOpen && <CheckCircleSolid />}
+          
         </Heading>
         
       </div>
