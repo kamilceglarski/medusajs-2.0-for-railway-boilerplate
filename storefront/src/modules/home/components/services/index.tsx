@@ -34,7 +34,7 @@ const services: ServiceItem[] = [
 
 const Services = () => {
   return (
-    <section className="w-full">
+    <section id="uslugi" className="w-full">
       
 
         <div className="bg-white py-12 sm:py-16">

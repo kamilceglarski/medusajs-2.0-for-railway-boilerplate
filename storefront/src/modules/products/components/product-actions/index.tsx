@@ -36,6 +36,8 @@ export default function ProductActions({
 }: ProductActionsProps) {
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
+  const [quantity, setQuantity] = useState<string>("1")
+  const [notes, setNotes] = useState<string>("")
   const countryCode = useParams().countryCode as string
 
   // If there is only 1 variant, preselect the options
@@ -99,10 +101,16 @@ export default function ProductActions({
 
     setIsAdding(true)
 
+    const qtyNum = Math.max(
+      1,
+      Math.min(99, Number.isFinite(parseInt(quantity, 10)) ? parseInt(quantity, 10) : 1)
+    )
+
     await addToCart({
       variantId: selectedVariant.id,
-      quantity: 1,
+      quantity: qtyNum,
       countryCode,
+      notes: notes?.trim() ? notes.trim() : undefined,
     })
 
     setIsAdding(false)
@@ -131,6 +139,78 @@ export default function ProductActions({
               <Divider />
             </div>
           )}
+        </div>
+
+        {/* Quantity selector (centered, above price) */}
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex items-center border border-ui-border-base rounded-md overflow-hidden">
+            <button
+              type="button"
+              aria-label="Decrease quantity"
+              className="px-3 py-2 text-ui-fg-subtle hover:text-ui-fg-base disabled:opacity-50"
+              onClick={() =>
+                setQuantity((q) => {
+                  const n = parseInt(q || "1", 10)
+                  return String(Math.max(1, n - 1))
+                })
+              }
+              disabled={!!disabled || isAdding}
+            >
+              −
+            </button>
+            <input
+              inputMode="numeric"
+              pattern="[0-9]*"
+              min={1}
+              max={99}
+              value={quantity}
+              onChange={(e) => {
+                const raw = e.target.value
+                // Allow empty string while typing
+                if (raw === "") {
+                  setQuantity("")
+                  return
+                }
+                // Accept only digits
+                if (/^\d+$/.test(raw)) {
+                  setQuantity(raw)
+                }
+              }}
+              onBlur={() => {
+                const n = parseInt(quantity || "1", 10)
+                const clamped = Math.max(1, Math.min(99, Number.isNaN(n) ? 1 : n))
+                setQuantity(String(clamped))
+              }}
+              className="w-14 text-center py-2 bg-transparent outline-none"
+              disabled={!!disabled || isAdding}
+            />
+            <button
+              type="button"
+              aria-label="Increase quantity"
+              className="px-3 py-2 text-ui-fg-subtle hover:text-ui-fg-base disabled:opacity-50"
+              onClick={() =>
+                setQuantity((q) => {
+                  const n = parseInt(q || "1", 10)
+                  return String(Math.min(99, n + 1))
+                })
+              }
+              disabled={!!disabled || isAdding}
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        {/* Optional notes for engraving / order */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm text-ui-fg-subtle">Uwagi do zamówienia (opcjonalnie)</label>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Np. treść graweru: Jan Kowalski, data 01.01.2025"
+            rows={3}
+            className="w-full rounded-md border border-ui-border-base p-3 bg-transparent outline-none resize-y"
+          />
         </div>
 
         <ProductPrice product={product} variant={selectedVariant} />

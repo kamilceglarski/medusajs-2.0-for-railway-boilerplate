@@ -79,10 +79,12 @@ export async function addToCart({
   variantId,
   quantity,
   countryCode,
+  notes,
 }: {
   variantId: string
   quantity: number
   countryCode: string
+  notes?: string
 }) {
   if (!variantId) {
     throw new Error("Missing variant ID when adding to cart")
@@ -99,6 +101,7 @@ export async function addToCart({
       {
         variant_id: variantId,
         quantity,
+        metadata: notes ? { notes } : undefined,
       },
       {},
       getAuthHeaders()

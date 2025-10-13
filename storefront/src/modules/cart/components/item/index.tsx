@@ -72,6 +72,11 @@ const Item = ({ item, type = "full" }: ItemProps) => {
           {item.product_title}
         </Text>
         <LineItemOptions variant={item.variant} data-testid="product-variant" />
+        {typeof (item?.metadata as any)?.notes !== "undefined" && (
+          <div className="mt-2">
+            <Text className="text-ui-fg-subtle text-sm">Uwagi: {String((item.metadata as any).notes)}</Text>
+          </div>
+        )}
       </Table.Cell>
 
       {type === "full" && (

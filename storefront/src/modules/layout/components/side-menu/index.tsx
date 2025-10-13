@@ -10,11 +10,12 @@ import CountrySelect from "../country-select"
 import { HttpTypes } from "@medusajs/types"
 
 const SideMenuItems = {
-  Home: "/",
-  Store: "/store",
-  Search: "/search",
-  Account: "/account",
-  Cart: "/cart",
+  "Strona główna": "/",
+  "Sklep": "/store",
+  "Szukaj": "/search",
+  "Konto": "/account",
+  "Koszyk": "/cart",
+  "Usługi": "/uslugi",
 }
 
 const SideMenu = ({ regions }: { regions: HttpTypes.StoreRegion[] | null }) => {
