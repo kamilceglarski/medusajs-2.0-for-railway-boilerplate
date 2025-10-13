@@ -107,27 +107,12 @@ const Payment = ({ cart }: { cart: any }) => {
           Payment
           {!isOpen && <CheckCircleSolid />}
         </Heading>
-        {!isOpen && (
-          <Text>
-            <button
-              onClick={handleEdit}
-              className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
-              data-testid="edit-payment-button"
-            >
-              Edit
-            </button>
-          </Text>
-        )}
+        
       </div>
 
       {isOpen ? (
         <div data-testid="payment-container">
           <div className="pb-8">
-            <div className="text-small-regular mb-4">
-              <Text className="txt-medium text-ui-fg-subtle">
-                Select your payment method
-              </Text>
-            </div>
 
             <ErrorMessage
               error={error}
@@ -142,23 +127,12 @@ const Payment = ({ cart }: { cart: any }) => {
               disabled={!cart?.items || cart.items.length === 0}
               data-testid="submit-payment-button"
             >
-              Zapłać przez Stripe
+              Zapłać 
             </Button>
           </div>
         </div>
       ) : (
-        <div>
-          <div className="text-small-regular">
-            <div className="flex flex-col w-1/3">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                Method
-              </Text>
-              <Text className="txt-medium text-ui-fg-subtle">
-                Stripe
-              </Text>
-            </div>
-          </div>
-        </div>
+        <></>
       )}
       <Divider className="mt-8" />
     </div>
