@@ -17,6 +17,7 @@ interface InPostPoint {
 interface InPostSelectorProps {
   onSelect: (point: InPostPoint) => void
   selectedPoint?: InPostPoint | null
+  autoOpen?: boolean
 }
 
 // Rozszerz window object dla TypeScript
@@ -27,10 +28,19 @@ declare global {
   }
 }
 
-const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint }) => {
+const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint, autoOpen }) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
+    // Dołącz arkusz stylów geowidget, jeśli nie istnieje
+    if (!document.getElementById('inpost-geowidget-style')) {
+      const link = document.createElement('link')
+      link.id = 'inpost-geowidget-style'
+      link.rel = 'stylesheet'
+      link.href = 'https://geowidget.easypack24.net/css/easypack.css'
+      document.head.appendChild(link)
+    }
+
     // Sprawdź czy skrypt już istnieje
     if (document.getElementById('inpost-geowidget-script')) {
       setIsLoaded(true)
@@ -57,40 +67,39 @@ const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint
   }, [])
 
   const openInPostMap = () => {
+    // Jeśli skrypt jeszcze się nie załadował, nie rób nic
     if (!window.easyPack) {
-      console.error('InPost widget not loaded')
-      return
+      console.warn('InPost widget not loaded yet')
     }
 
+    // Zawsze definiujemy init, a jeśli easyPack jest dostępny – odpalamy od razu
     window.easyPackAsyncInit = function () {
-      window.easyPack.init({
-        instance: 'pl',
-        defaultLocale: 'pl',
-        mapType: 'osm',
-        searchType: 'osm',
-        points: {
-          types: ['parcel_locker']
-        },
-        map: {
-          initialTypes: ['parcel_locker']
-        }
-      })
-
-      const map = window.easyPack.mapWidget('easypack-map', function(point: any) {
-        // Callback gdy użytkownik wybierze paczkomat
-        console.log('Selected InPost point:', point)
-        onSelect({
-          name: point.name,
-          address: {
-            line1: point.address.line1,
-            line2: point.address.line2
-          },
-          location: {
-            latitude: point.location.latitude,
-            longitude: point.location.longitude
-          }
+      try {
+        window.easyPack.init({
+          instance: 'pl',
+          defaultLocale: 'pl',
+          mapType: 'osm',
+          searchType: 'osm',
+          points: { types: ['parcel_locker'] },
+          map: { initialTypes: ['parcel_locker'] },
         })
-      })
+        window.easyPack.mapWidget('easypack-map', function(point: any) {
+          // Callback gdy użytkownik wybierze paczkomat
+          onSelect({
+            name: point.name,
+            address: {
+              line1: point.address.line1,
+              line2: point.address.line2,
+            },
+            location: {
+              latitude: point.location.latitude,
+              longitude: point.location.longitude,
+            },
+          })
+        })
+      } catch (e) {
+        console.error('Failed to init InPost widget:', e)
+      }
     }
 
     if (window.easyPack) {
@@ -98,30 +107,40 @@ const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint
     }
   }
 
+  // Auto-open when requested and script is loaded
+  useEffect(() => {
+    if (autoOpen && isLoaded) {
+      openInPostMap()
+    }
+  }, [autoOpen, isLoaded])
+
   return (
     <div className="inpost-selector">
-      <button
-        onClick={openInPostMap}
-        disabled={!isLoaded}
-        type="button"
-        className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-      >
-        {isLoaded ? 'Wybierz Paczkomat InPost' : 'Ładowanie...'}
-      </button>
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          onClick={openInPostMap}
+          disabled={!isLoaded}
+          type="button"
+          className="px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+        >
+          {isLoaded ? 'Wybierz Paczkomat InPost' : 'Ładowanie mapy...'}
+        </button>
 
-      {selectedPoint && (
-        <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <h3 className="font-semibold mb-2 text-sm">Wybrany paczkomat:</h3>
-          <p className="text-sm font-medium">{selectedPoint.name}</p>
-          <p className="text-xs text-gray-600 mt-1">
-            {selectedPoint.address.line1}
-            {selectedPoint.address.line2 && `, ${selectedPoint.address.line2}`}
-          </p>
-        </div>
-      )}
+        {selectedPoint && (
+          <div className="p-3 bg-gray-50 rounded-md border border-gray-200 text-sm">
+            <span className="font-semibold">{selectedPoint.name}</span>
+            <span className="ml-2 text-gray-600">
+              {selectedPoint.address.line1}
+              {selectedPoint.address.line2 && `, ${selectedPoint.address.line2}`}
+            </span>
+          </div>
+        )}
+      </div>
 
-      {/* Kontener na mapę - musi być w DOM */}
-      <div id="easypack-map"></div>
+      {/* Kontener na mapę - ograniczona szerokość, stała wysokość */}
+      <div className="mt-4 w-full max-w-2xl mx-auto">
+        <div id="easypack-map" className="w-full h-80 rounded-lg border border-gray-200 overflow-hidden"></div>
+      </div>
     </div>
   )
 }

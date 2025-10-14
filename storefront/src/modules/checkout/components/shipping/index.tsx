@@ -8,10 +8,13 @@ import Divider from "@modules/common/components/divider"
 import Radio from "@modules/common/components/radio"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { setShippingMethod } from "@lib/data/cart"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
+import InPostSelector from "@modules/checkout/components/inpost-selector"
+import { setInpostPoint } from "@lib/data/cart"
+import { useFormState } from "react-dom"
 
 type ShippingProps = {
   cart: HttpTypes.StoreCart
@@ -24,6 +27,12 @@ const Shipping: React.FC<ShippingProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [inpostMessage, inpostAction] = useFormState(setInpostPoint, null)
+  const [selectedInpostPoint, setSelectedInpostPoint] = useState<any>(
+    (cart.metadata as any)?.inpost_point || null
+  )
+  const inpostFormRef = useRef<HTMLFormElement | null>(null)
+  const inpostInputRef = useRef<HTMLInputElement | null>(null)
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -34,6 +43,12 @@ const Shipping: React.FC<ShippingProps> = ({
   const selectedShippingMethod = availableShippingMethods?.find(
     // To do: remove the previously selected shipping method instead of using the last one
     (method) => method.id === cart.shipping_methods?.at(-1)?.shipping_option_id
+  )
+
+  const isInpostSelected = !!selectedShippingMethod && (
+    ((selectedShippingMethod as any).data?.inpost === true) ||
+    ((selectedShippingMethod as any).provider_id === 'inpost') ||
+    selectedShippingMethod.name?.toLowerCase().includes('inpost')
   )
 
   const handleEdit = () => {
@@ -128,6 +143,36 @@ const Shipping: React.FC<ShippingProps> = ({
             </RadioGroup>
           </div>
 
+          {isInpostSelected && (
+            <div className="mt-6 p-4 border border-gray-200 rounded-lg">
+              <h3 className="font-medium mb-3">Wybór paczkomatu InPost</h3>
+              <form action={inpostAction} ref={inpostFormRef}>
+                <input
+                  ref={inpostInputRef}
+                  type="hidden"
+                  name="inpost_point"
+                  value={selectedInpostPoint ? JSON.stringify(selectedInpostPoint) : ""}
+                  readOnly
+                />
+                <InPostSelector
+                  autoOpen={true}
+                  onSelect={(point) => {
+                    setSelectedInpostPoint(point)
+                    if (inpostInputRef.current) {
+                      inpostInputRef.current.value = JSON.stringify(point)
+                    }
+                    // opóźnij minimalnie, aby stan zaktualizował się przed submit
+                    setTimeout(() => inpostFormRef.current?.requestSubmit(), 0)
+                  }}
+                  selectedPoint={selectedInpostPoint}
+                />
+              </form>
+              {inpostMessage && (
+                <p className="mt-2 text-sm text-red-600">{inpostMessage}</p>
+              )}
+            </div>
+          )}
+
           <ErrorMessage
             error={error}
             data-testid="delivery-option-error-message"
@@ -138,7 +183,7 @@ const Shipping: React.FC<ShippingProps> = ({
             className="mt-6"
             onClick={handleSubmit}
             isLoading={isLoading}
-            disabled={!cart.shipping_methods?.[0]}
+            disabled={!cart.shipping_methods?.[0] || (isInpostSelected && !selectedInpostPoint)}
             data-testid="submit-delivery-option-button"
           >
             Przejdź do płatności

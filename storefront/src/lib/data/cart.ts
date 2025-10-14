@@ -306,6 +306,28 @@ export async function submitPromotionForm(
   }
 }
 
+export async function setInpostPoint(currentState: unknown, formData: FormData) {
+  try {
+    if (!formData) throw new Error("No form data found when setting InPost point")
+    const cart = await retrieveCart()
+    if (!cart?.id) throw new Error("No existing cart found when setting InPost point")
+
+    const json = (formData.get("inpost_point") as string) || ""
+    let point: any = null
+    try {
+      point = json ? JSON.parse(json) : null
+    } catch {
+      point = null
+    }
+
+    const existingMeta = (cart as any).metadata || {}
+    await updateCart({ metadata: { ...existingMeta, inpost_point: point } as any })
+    revalidateTag("cart")
+  } catch (e: any) {
+    return e.message
+  }
+}
+
 // TODO: Pass a POJO instead of a form entity here
 export async function setAddresses(currentState: unknown, formData: FormData) {
   try {
