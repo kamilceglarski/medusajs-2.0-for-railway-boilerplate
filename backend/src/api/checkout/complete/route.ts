@@ -6,21 +6,21 @@ export async function GET(
   res: MedusaResponse
 ): Promise<void> {
   console.log("=== CHECKOUT COMPLETE CALLED ===")
-  
+
   const { cart_id, session_id } = req.query
 
   console.log("Cart ID:", cart_id)
   console.log("Session ID:", session_id)
 
   if (!cart_id || typeof cart_id !== "string") {
-    const redirectUrl = process.env.STOREFRONT_URL 
+    const redirectUrl = process.env.STOREFRONT_URL
       ? `${process.env.STOREFRONT_URL}/checkout?step=payment&error=no_cart_id`
       : "http://localhost:8000/checkout?step=payment&error=no_cart_id"
-    
+
     return res.redirect(redirectUrl)
   }
 
-  const publishableKey = process.env.MEDUSA_PUBLISHABLE_KEY || "pk_f77f0615ecdd30f3ae032146861b57d692c321290d5410f5d4c3adb3acbee89a"
+  const publishableKey = process.env.MEDUSA_PUBLISHABLE_KEY || "pk_3d5aea7d15f3a98c84973274c13b6a51c1c7f8e09600aefb557955273e721420"
   const backendUrl = process.env.MEDUSA_BACKEND_URL || "http://localhost:9000"
 
   try {
@@ -29,9 +29,9 @@ export async function GET(
       console.log("Verifying Stripe session...")
       const stripe = require("stripe")(process.env.STRIPE_API_KEY)
       const session = await stripe.checkout.sessions.retrieve(session_id)
-      
+
       console.log("Stripe session status:", session.payment_status)
-      
+
       if (session.payment_status !== "paid") {
         throw new Error("Payment not completed")
       }
@@ -69,7 +69,7 @@ export async function GET(
     // 3. Utwórz payment session w payment collection
     if (paymentCollectionId) {
       console.log("Creating payment session in payment collection...")
-      
+
       const paymentSessionResponse = await fetch(
         `${backendUrl}/store/payment-collections/${paymentCollectionId}/payment-sessions`,
         {
@@ -87,13 +87,13 @@ export async function GET(
       if (paymentSessionResponse.ok) {
         const sessionData = await paymentSessionResponse.json()
         console.log("Payment session created:", sessionData.payment_session?.id)
-        
+
         const paymentSessionId = sessionData.payment_session?.id
-        
+
         // Oznacz payment session jako authorized (płatność zakończona w Stripe)
         if (paymentSessionId) {
           console.log("Authorizing payment session...")
-          
+
           const authorizeResponse = await fetch(
             `${backendUrl}/store/payment-collections/${paymentCollectionId}/payment-sessions/${paymentSessionId}/authorize`,
             {
@@ -104,7 +104,7 @@ export async function GET(
               },
             }
           )
-          
+
           if (authorizeResponse.ok) {
             console.log("Payment session authorized successfully!")
           } else {
@@ -132,7 +132,7 @@ export async function GET(
     )
 
     console.log("Complete cart response status:", completeResponse.status)
-    
+
     if (!completeResponse.ok) {
       const errorData = await completeResponse.json().catch(() => ({}))
       console.error("Complete cart error response:", errorData)
@@ -141,7 +141,7 @@ export async function GET(
 
     const responseData = await completeResponse.json()
     console.log("Complete cart response:", responseData)
-    
+
     const order = responseData.order
 
     if (!order || !order.id) {
@@ -153,21 +153,21 @@ export async function GET(
 
     // 5. Przekieruj do strony potwierdzenia
     const locale = "pl"
-    const redirectUrl = process.env.STOREFRONT_URL 
+    const redirectUrl = process.env.STOREFRONT_URL
       ? `${process.env.STOREFRONT_URL}/${locale}/order/confirmed/${order.id}`
       : `http://localhost:8000/${locale}/order/confirmed/${order.id}`
-    
+
     console.log("Redirecting to:", redirectUrl)
-    
+
     return res.redirect(redirectUrl)
 
   } catch (error) {
     console.error("Error completing checkout:", error)
-    
-    const redirectUrl = process.env.STOREFRONT_URL 
+
+    const redirectUrl = process.env.STOREFRONT_URL
       ? `${process.env.STOREFRONT_URL}/checkout?step=payment&error=payment_failed`
       : "http://localhost:8000/checkout?step=payment&error=payment_failed"
-    
+
     return res.redirect(redirectUrl)
   }
 }

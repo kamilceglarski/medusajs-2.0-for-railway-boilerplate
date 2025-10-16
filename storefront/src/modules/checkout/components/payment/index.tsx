@@ -11,7 +11,7 @@ const Payment = ({ cart }: { cart: any }) => {
   const [loading, setLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  
+
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -63,7 +63,7 @@ const Payment = ({ cart }: { cart: any }) => {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            "x-publishable-api-key": "pk_f77f0615ecdd30f3ae032146861b57d692c321290d5410f5d4c3adb3acbee89a"
+            "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "",
           },
           body: JSON.stringify(payload),
         }
@@ -105,9 +105,9 @@ const Payment = ({ cart }: { cart: any }) => {
           )}
         >
           Płatność
-          
+
         </Heading>
-        
+
       </div>
 
       {isOpen ? (
@@ -127,7 +127,7 @@ const Payment = ({ cart }: { cart: any }) => {
               disabled={!cart?.items || cart.items.length === 0}
               data-testid="submit-payment-button"
             >
-              Zapłać 
+              Zapłać
             </Button>
           </div>
         </div>
