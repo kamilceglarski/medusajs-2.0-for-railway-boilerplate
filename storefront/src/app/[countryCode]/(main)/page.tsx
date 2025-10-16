@@ -8,6 +8,7 @@ import { getRegion } from "@lib/data/regions"
 import TestimonialsSlider from "@modules/home/components/reviewSection/TestimonialsSlider";
 import FeaturedCategories from "@modules/home/components/featured-categories"
 import Services from "@modules/home/components/services"
+import FAQ from "@modules/home/components/faq"
 
 
 export const metadata: Metadata = {
@@ -52,9 +53,8 @@ export default async function Home({
       <Hero />
       <FeaturedCategories />
       <Services />
-
+      <FAQ />
       <TestimonialsSlider />
-
     </>
   )
 }
