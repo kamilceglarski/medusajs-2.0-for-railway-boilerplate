@@ -44,11 +44,9 @@ const ShippingAddress = ({
         "shipping_address.first_name": address?.first_name || "",
         "shipping_address.last_name": address?.last_name || "",
         "shipping_address.address_1": address?.address_1 || "",
-        "shipping_address.company": address?.company || "",
         "shipping_address.postal_code": address?.postal_code || "",
         "shipping_address.city": address?.city || "",
         "shipping_address.country_code": address?.country_code || "",
-        "shipping_address.province": address?.province || "",
         "shipping_address.phone": address?.phone || "",
       }))
 
@@ -75,10 +73,14 @@ const ShippingAddress = ({
       HTMLInputElement | HTMLInputElement | HTMLSelectElement
     >
   ) => {
+    const value = e.target.value
+    const name = e.target.name
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     })
+
   }
 
   return (
@@ -128,14 +130,6 @@ const ShippingAddress = ({
           data-testid="shipping-address-input"
         />
         <Input
-          label="Firma"
-          name="shipping_address.company"
-          value={formData["shipping_address.company"]}
-          onChange={handleChange}
-          autoComplete="organization"
-          data-testid="shipping-company-input"
-        />
-        <Input
           label="Kod pocztowy"
           name="shipping_address.postal_code"
           autoComplete="postal-code"
@@ -161,14 +155,6 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-country-select"
-        />
-        <Input
-          label="Województwo"
-          name="shipping_address.province"
-          autoComplete="address-level1"
-          value={formData["shipping_address.province"]}
-          onChange={handleChange}
-          data-testid="shipping-province-input"
         />
       </div>
       <div className="my-8">

@@ -80,11 +80,13 @@ export async function addToCart({
   quantity,
   countryCode,
   notes,
+  customImages,
 }: {
   variantId: string
   quantity: number
   countryCode: string
   notes?: string
+  customImages?: string[]
 }) {
   if (!variantId) {
     throw new Error("Missing variant ID when adding to cart")
@@ -95,13 +97,23 @@ export async function addToCart({
     throw new Error("Error retrieving or creating cart")
   }
 
+  // Przygotuj metadata z notes i customImages
+  const metadata: Record<string, any> = {}
+  if (notes) {
+    metadata.notes = notes
+  }
+  if (customImages && customImages.length > 0) {
+    metadata.customImages = customImages
+    console.log('🔍 Adding customImages to cart:', customImages)
+  }
+
   await sdk.store.cart
     .createLineItem(
       cart.id,
       {
         variant_id: variantId,
         quantity,
-        metadata: notes ? { notes } : undefined,
+        metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
       },
       {},
       getAuthHeaders()
@@ -329,6 +341,45 @@ export async function setInpostPoint(currentState: unknown, formData: FormData) 
 }
 
 // TODO: Pass a POJO instead of a form entity here
+// Walidacja numeru telefonu
+const validatePhone = (phone: string): boolean => {
+  if (!phone) return false
+
+  // Usuń wszystkie spacje i myślniki
+  const cleanPhone = phone.replace(/[\s\-]/g, '')
+
+  // Sprawdź różne formaty:
+  // 1. 9 cyfr (np. 123456789)
+  // 2. +48 + 9 cyfr (np. +48123456789)
+  // 3. 11 cyfr (np. 48123456789)
+  // 4. +48 + spacja + 9 cyfr (np. +48 123456789)
+
+  const patterns = [
+    /^\d{9}$/, // 9 cyfr
+    /^\+48\d{9}$/, // +48 + 9 cyfr
+    /^\d{11}$/, // 11 cyfr
+    /^\+48\s\d{9}$/, // +48 + spacja + 9 cyfr
+  ]
+
+  return patterns.some(pattern => pattern.test(cleanPhone))
+}
+
+// Walidacja kodu pocztowego
+const validatePostalCode = (postalCode: string): boolean => {
+  if (!postalCode) return false
+
+  // Sprawdź formaty:
+  // 1. xx-xxx (np. 12-345)
+  // 2. xxxxx (np. 12345)
+
+  const patterns = [
+    /^\d{2}-\d{3}$/, // xx-xxx
+    /^\d{5}$/, // xxxxx
+  ]
+
+  return patterns.some(pattern => pattern.test(postalCode))
+}
+
 export async function setAddresses(currentState: unknown, formData: FormData) {
   try {
     if (!formData) {
@@ -337,6 +388,28 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
     const cartId = getCartId()
     if (!cartId) {
       throw new Error("No existing cart found when setting addresses")
+    }
+
+    // Walidacja telefonu
+    const shippingPhone = formData.get("shipping_address.phone") as string
+    if (shippingPhone && !validatePhone(shippingPhone)) {
+      throw new Error("Wprowadź prawidłowy numer telefonu (9 cyfr, +48 9 cyfr lub 11 cyfr)")
+    }
+
+    const billingPhone = formData.get("billing_address.phone") as string
+    if (billingPhone && !validatePhone(billingPhone)) {
+      throw new Error("Wprowadź prawidłowy numer telefonu rozliczeniowego (9 cyfr, +48 9 cyfr lub 11 cyfr)")
+    }
+
+    // Walidacja kodu pocztowego
+    const shippingPostalCode = formData.get("shipping_address.postal_code") as string
+    if (shippingPostalCode && !validatePostalCode(shippingPostalCode)) {
+      throw new Error("Wprowadź prawidłowy kod pocztowy (xx-xxx lub xxxxx)")
+    }
+
+    const billingPostalCode = formData.get("billing_address.postal_code") as string
+    if (billingPostalCode && !validatePostalCode(billingPostalCode)) {
+      throw new Error("Wprowadź prawidłowy kod pocztowy rozliczeniowy (xx-xxx lub xxxxx)")
     }
 
     const data = {

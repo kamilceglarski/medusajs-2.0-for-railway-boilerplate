@@ -59,8 +59,16 @@ const Hero = () => {
     tryPlay()
   }, [])
 
+  // Scroll to next section function
+  const scrollToNext = () => {
+    const nextSection = document.querySelector('section:nth-of-type(2)')
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
-    <section className="relative h-[80vh] w-full overflow-hidden border-b border-ui-border-base bg-ui-bg-subtle">
+    <section className="relative h-screen w-full overflow-hidden border-b border-ui-border-base bg-ui-bg-subtle -mt-16 pt-16">
       {/* Background video */}
       <video
         ref={videoRef}
@@ -106,6 +114,31 @@ const Hero = () => {
                 <li className="opacity-80">Google</li>
               </ul>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Animated scroll arrow */}
+      <div
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+        onClick={scrollToNext}
+      >
+        <div className="flex flex-col items-center text-white/80 cursor-pointer group">
+          <span className="text-sm mb-3 animate-pulse group-hover:animate-none">Zobacz więcej</span>
+          <div className="animate-bounce group-hover:animate-none transition-transform duration-500 group-hover:translate-y-1" style={{ animationDuration: '2s' }}>
+            <svg
+              className="w-6 h-6 transition-all duration-300 group-hover:scale-110"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+              />
+            </svg>
           </div>
         </div>
       </div>
