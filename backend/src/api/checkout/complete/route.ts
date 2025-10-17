@@ -164,9 +164,13 @@ export async function GET(
   } catch (error) {
     console.error("Error completing checkout:", error)
 
+    // Extract error information
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorCode = error instanceof Error && 'code' in error ? (error as any).code : 'processing_error'
+
     const redirectUrl = process.env.STOREFRONT_URL
-      ? `${process.env.STOREFRONT_URL}/checkout?step=payment&error=payment_failed`
-      : "http://localhost:8000/checkout?step=payment&error=payment_failed"
+      ? `${process.env.STOREFRONT_URL}/payment-failed?error=${encodeURIComponent(errorCode)}&message=${encodeURIComponent(errorMessage)}`
+      : `http://localhost:8000/payment-failed?error=${encodeURIComponent(errorCode)}&message=${encodeURIComponent(errorMessage)}`
 
     return res.redirect(redirectUrl)
   }

@@ -29,11 +29,18 @@ export const updateCustomer = cache(async function (
 
 export async function signup(_currentState: unknown, formData: FormData) {
   const password = formData.get("password") as string
+  const phone = formData.get("phone") as string
+
+  // Validate required phone number
+  if (!phone || phone.trim() === "") {
+    return "Numer telefonu jest wymagany"
+  }
+
   const customerForm = {
     email: formData.get("email") as string,
     first_name: formData.get("first_name") as string,
     last_name: formData.get("last_name") as string,
-    phone: formData.get("phone") as string,
+    phone: phone,
   }
 
   try {
@@ -43,7 +50,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
     })
 
     const customHeaders = { authorization: `Bearer ${token}` }
-    
+
     const { customer: createdCustomer } = await sdk.store.customer.create(
       customerForm,
       {},
