@@ -59,7 +59,7 @@ export async function POST(
           product_data: {
             name: "Shipping",
           },
-          unit_amount: Math.round(cart.shipping_total),
+          unit_amount: Math.round(cart.shipping_total * 100),
         },
         quantity: 1,
       })

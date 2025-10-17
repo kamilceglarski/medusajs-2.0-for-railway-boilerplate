@@ -112,10 +112,10 @@ const Hero = () => {
 
         {/* Main content */}
         <div className="relative z-10 min-h-full w-full flex items-center py-8 sm:py-12">
-          <div className="content-container px-4 sm:px-6 lg:px-8">
+          <div className="content-container px-4 sm:px-6 lg:px-8 w-full">
             <div className="max-w-4xl">
-              {/* Logo and Badge - Left aligned for symmetry */}
-              <div className={`flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              {/* Logo and Badge - Centered on mobile, left aligned on desktop */}
+              <div className={`flex flex-col sm:flex-row items-center sm:items-start sm:items-center gap-6 mb-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 {/* Logo */}
                 <div className="flex-shrink-0">
                   <Image
@@ -137,7 +137,7 @@ const Hero = () => {
               </div>
 
               {/* Main heading */}
-              <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ color: '#0E3E4D' }}>
+              <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-center sm:text-left transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ color: '#0E3E4D' }}>
                 <span className="block">Grawerowanie laserowe</span>
                 <span className="block" style={{ color: '#B57641' }} aria-live="polite" aria-label={`Animowane słowo: ${displayed}`}>
                   {displayed}
@@ -147,13 +147,13 @@ const Hero = () => {
               </h1>
 
               {/* Description */}
-              <p className={`text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl leading-relaxed transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ color: '#0E3E4D' }}>
+              <p className={`text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl leading-relaxed text-center sm:text-left transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ color: '#0E3E4D' }}>
                 Tworzymy <strong style={{ color: '#B57641' }}>wyjątkowe dekoracje</strong> i <strong style={{ color: '#B57641' }}>precyzyjne grawery</strong> ze sklejki.
                 Personalizowane tabliczki, dekoracje ślubne, prezenty i gadżety firmowe — wszystko na najwyższym poziomie.
               </p>
 
               {/* CTA Buttons */}
-              <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} role="group" aria-label="Główne akcje">
+              <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 items-center sm:items-start transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} role="group" aria-label="Główne akcje">
                 <Button asChild size="large" variant="primary" className="text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold w-full sm:w-auto" style={{ backgroundColor: '#0E3E4D' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0A2F3A'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0E3E4D'} aria-label="Przejdź do katalogu produktów Lumoria Studio">
                   <Link href="/search">Zobacz nasze produkty</Link>
                 </Button>
@@ -163,7 +163,7 @@ const Hero = () => {
               </div>
 
               {/* Features grid */}
-              <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} role="list" aria-label="Zalety usług Lumoria Studio">
+              <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 justify-items-center sm:justify-items-start transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} role="list" aria-label="Zalety usług Lumoria Studio">
                 <div className="flex items-center space-x-3 bg-white/80 backdrop-blur-sm rounded-lg p-3 sm:p-4 border" style={{ borderColor: '#0E3E4D30' }} role="listitem">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0E3E4D20' }} aria-hidden="true">
                     <span className="text-base sm:text-lg" style={{ color: '#0E3E4D' }}>⚡</span>
@@ -200,7 +200,7 @@ const Hero = () => {
 
         {/* Animated scroll arrow */}
         <div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+          className="absolute bottom-2 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20"
           onClick={scrollToNext}
           role="button"
           tabIndex={0}
