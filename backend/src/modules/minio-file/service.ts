@@ -1,6 +1,6 @@
 import { AbstractFileProviderService, MedusaError } from '@medusajs/framework/utils';
 import { Logger } from '@medusajs/framework/types';
-import { 
+import {
   ProviderUploadFileDTO,
   ProviderDeleteFileDTO,
   ProviderFileResultDTO,
@@ -54,11 +54,16 @@ class MinioFileProviderService extends AbstractFileProviderService {
     this.bucket = this.config_.bucket || DEFAULT_BUCKET
     this.logger_.info(`MinIO service initialized with bucket: ${this.bucket}`)
 
-    // Initialize Minio client with hardcoded SSL settings
+    // Initialize Minio client with configurable settings
+    // Parse endpoint to extract host and port
+    const [host, port] = this.config_.endPoint.includes(':')
+      ? this.config_.endPoint.split(':')
+      : [this.config_.endPoint, '9000']
+
     this.client = new Client({
-      endPoint: this.config_.endPoint,
-      port: 443,
-      useSSL: true,
+      endPoint: host,
+      port: parseInt(port),
+      useSSL: false,
       accessKey: this.config_.accessKey,
       secretKey: this.config_.secretKey
     })
@@ -90,7 +95,7 @@ class MinioFileProviderService extends AbstractFileProviderService {
     try {
       // Check if bucket exists
       const bucketExists = await this.client.bucketExists(this.bucket)
-      
+
       if (!bucketExists) {
         // Create the bucket
         await this.client.makeBucket(this.bucket)
@@ -114,7 +119,7 @@ class MinioFileProviderService extends AbstractFileProviderService {
         this.logger_.info(`Set public read policy for bucket: ${this.bucket}`)
       } else {
         this.logger_.info(`Using existing bucket: ${this.bucket}`)
-        
+
         // Verify/update policy on existing bucket
         try {
           const policy = {
@@ -177,7 +182,7 @@ class MinioFileProviderService extends AbstractFileProviderService {
       )
 
       // Generate URL using the endpoint and bucket
-      const url = `https://${this.config_.endPoint}/${this.bucket}/${fileKey}`
+      const url = `http://${this.config_.endPoint}/${this.bucket}/${fileKey}`
 
       this.logger_.info(`Successfully uploaded file ${fileKey} to MinIO bucket ${this.bucket}`)
 

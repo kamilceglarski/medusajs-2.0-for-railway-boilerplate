@@ -13,6 +13,7 @@ import MobileActions from "./mobile-actions"
 import ProductPrice from "../product-price"
 import { addToCart } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
+import ImageUpload from "../image-upload"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -38,6 +39,13 @@ export default function ProductActions({
   const [isAdding, setIsAdding] = useState(false)
   const [quantity, setQuantity] = useState<string>("1")
   const [notes, setNotes] = useState<string>("")
+  const [customImages, setCustomImages] = useState<string[]>([])
+
+  // Debug function to track customImages changes
+  const handleCustomImagesChange = (newImages: string[]) => {
+    console.log('🔍 ProductActions: setCustomImages called with:', newImages)
+    setCustomImages(newImages)
+  }
   const countryCode = useParams().countryCode as string
 
   // If there is only 1 variant, preselect the options
@@ -106,11 +114,15 @@ export default function ProductActions({
       Math.min(99, Number.isFinite(parseInt(quantity, 10)) ? parseInt(quantity, 10) : 1)
     )
 
+    console.log('🔍 customImages before addToCart:', customImages)
+    console.log('🔍 customImages length:', customImages.length)
+
     await addToCart({
       variantId: selectedVariant.id,
       quantity: qtyNum,
       countryCode,
       notes: notes?.trim() ? notes.trim() : undefined,
+      customImages: customImages.length > 0 ? customImages : undefined,
     })
 
     setIsAdding(false)
@@ -149,6 +161,15 @@ export default function ProductActions({
             placeholder="Np. treść graweru: Jan Kowalski, data 01.01.2025"
             rows={3}
             className="w-full rounded-md border border-ui-border-base p-3 bg-transparent outline-none resize-y"
+          />
+        </div>
+
+        {/* Custom images upload for personalized products */}
+        <div className="flex flex-col gap-2">
+          <ImageUpload
+            onImagesChange={handleCustomImagesChange}
+            maxImages={3}
+            disabled={!!disabled || isAdding}
           />
         </div>
 
