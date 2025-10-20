@@ -53,14 +53,23 @@ export async function POST(
         const buffer = file.buffer
 
         // Utwórz MinIO client
-        const endpoint = process.env.MINIO_ENDPOINT || 'localhost:9101'
-        const [host, port] = endpoint.includes(':') ? endpoint.split(':') : [endpoint, '9101']
-        const useSSL = process.env.MINIO_USE_SSL === 'true' || endpoint.startsWith('https://')
+        // Publiczny endpoint do generowania URL-i (np. https://cdn.example.com)
+        const publicEndpoint = process.env.MINIO_ENDPOINT || 'localhost:9101'
+
+        // Endpoint do połączenia SDK (np. 127.0.0.1:9101 lub minio:9000). Fallback do publicznego.
+        const sdkEndpointRaw = process.env.MINIO_SDK_ENDPOINT || publicEndpoint
+
+        // Usuń protokół do połączenia SDK i do ewentualnego parsowania portu
+        const sdkEndpoint = sdkEndpointRaw.replace(/^https?:\/\//, '')
+        const defaultPort = process.env.MINIO_PORT || '9101'
+        const [host, port] = sdkEndpoint.includes(':') ? sdkEndpoint.split(':') : [sdkEndpoint, defaultPort]
+
+        const useSSL = process.env.MINIO_USE_SSL === 'true' || publicEndpoint.startsWith('https://')
 
         const minioClient = new Client({
             endPoint: host,
             port: parseInt(port),
-            useSSL: useSSL,
+            useSSL,
             accessKey: process.env.MINIO_ACCESS_KEY || 'minioadmin',
             secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin'
         })
@@ -85,9 +94,9 @@ export async function POST(
         )
         console.log(`✅ Successfully uploaded: ${fileName}`)
 
-        // Generuj URL - użyj HTTPS jeśli endpoint zaczyna się od https://
-        const protocol = endpoint.startsWith('https://') ? 'https' : 'http'
-        const cleanEndpoint = endpoint.replace(/^https?:\/\//, '') // Usuń protokół z endpoint
+        // Generuj URL - użyj HTTPS jeśli publicEndpoint zaczyna się od https://
+        const protocol = publicEndpoint.startsWith('https://') ? 'https' : 'http'
+        const cleanEndpoint = publicEndpoint.replace(/^https?:\/\//, '') // Usuń protokół z endpoint
         const fileUrl = `${protocol}://${cleanEndpoint}/${bucket}/${fileName}`
         console.log(`🔗 Generated URL: ${fileUrl}`)
 
