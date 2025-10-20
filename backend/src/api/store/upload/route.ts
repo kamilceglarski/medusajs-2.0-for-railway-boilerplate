@@ -64,15 +64,17 @@ export async function POST(
             secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin'
         })
 
-        // Generuj unikalną nazwę pliku
+        // Generuj unikalną nazwę pliku (bez prefiksu katalogu)
         const timestamp = Date.now()
         const randomString = Math.random().toString(36).substring(2, 15)
         const fileExtension = file.originalname?.split('.').pop() || 'jpg'
-        const fileName = `uploads/${timestamp}-${randomString}.${fileExtension}`
+        const fileName = `${timestamp}-${randomString}.${fileExtension}`
 
         // Upload do MinIO
+        const bucket = process.env.MINIO_BUCKET || 'medusa-media'
+        console.log(`📤 Uploading to MinIO: bucket=${bucket}, file=${fileName}`)
         await minioClient.putObject(
-            process.env.MINIO_BUCKET || 'uploads',
+            bucket,
             fileName,
             buffer,
             buffer.length,
@@ -80,9 +82,12 @@ export async function POST(
                 'Content-Type': file.mimetype
             }
         )
+        console.log(`✅ Successfully uploaded: ${fileName}`)
 
-        // Generuj URL
-        const fileUrl = `http://${endpoint}/${process.env.MINIO_BUCKET || 'uploads'}/${fileName}`
+        // Generuj URL - użyj HTTPS dla produkcji
+        const protocol = endpoint.includes('lumoria-studio.pl') ? 'https' : 'http'
+        const fileUrl = `${protocol}://${endpoint}/${bucket}/${fileName}`
+        console.log(`🔗 Generated URL: ${fileUrl}`)
 
         res.json({
             file: {

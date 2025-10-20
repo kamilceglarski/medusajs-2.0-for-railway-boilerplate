@@ -21,7 +21,9 @@ const nextConfig = {
       },
       {
         // for serving images from /public
-        protocol: process.env.NEXT_PUBLIC_BASE_URL?.startsWith("https") ? "https" : "http",
+        protocol: process.env.NEXT_PUBLIC_BASE_URL?.startsWith("https")
+          ? "https"
+          : "http",
         hostname: process.env.NEXT_PUBLIC_BASE_URL
           ? process.env.NEXT_PUBLIC_BASE_URL.replace(/^https?:\/\//, "")
           : "https://lumoria-studio.pl", // fallback to your production domain
@@ -47,12 +49,16 @@ const nextConfig = {
       },
       ...(process.env.NEXT_PUBLIC_MINIO_ENDPOINT
         ? [
-          {
-            protocol: "https",
-            hostname: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
-          },
-        ]
+            {
+              protocol: "https",
+              hostname: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
+            },
+          ]
         : []),
+      {
+        protocol: "https",
+        hostname: "lumoria-studio.pl",
+      },
     ],
   },
   serverRuntimeConfig: {
