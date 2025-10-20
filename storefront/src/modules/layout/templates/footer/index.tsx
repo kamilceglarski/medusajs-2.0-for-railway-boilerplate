@@ -110,29 +110,14 @@ export default async function Footer() {
               <span className="txt-small-plus txt-ui-fg-base">Kontakt</span>
               <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
                 <li>
-                  <a
-                    href="mailto:kontakt@lumoriastudio.pl"
+                  <LocalizedClientLink
+                    href="/contact"
                     className="hover:text-ui-fg-base"
                   >
-                    Email
-                  </a>
+                    Formularz kontaktowy
+                  </LocalizedClientLink>
                 </li>
-                <li>
-                  <a
-                    href="tel:+48123456789"
-                    className="hover:text-ui-fg-base"
-                  >
-                    Telefon
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/uslugi"
-                    className="hover:text-ui-fg-base"
-                  >
-                    Nasze usługi
-                  </a>
-                </li>
+
               </ul>
             </div>
           </div>

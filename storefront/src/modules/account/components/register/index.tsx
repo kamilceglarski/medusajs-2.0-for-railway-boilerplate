@@ -25,8 +25,7 @@ const Register = ({ setCurrentView }: Props) => {
         Zostań klientem Lumoria Studio
       </h1>
       <p className="text-center text-base-regular text-ui-fg-base mb-4">
-        Utwórz swój profil klienta Lumoria Studio i zyskaj dostęp do
-        ulepszonego doświadczenia zakupowego.
+        Chcesz kupować szybciej i wygodniej? Zaloguj się!
       </p>
       <form className="w-full flex flex-col" action={formAction}>
         <div className="flex flex-col w-full gap-y-2">
