@@ -55,11 +55,12 @@ export async function POST(
         // Utwórz MinIO client
         const endpoint = process.env.MINIO_ENDPOINT || 'localhost:9101'
         const [host, port] = endpoint.includes(':') ? endpoint.split(':') : [endpoint, '9101']
+        const useSSL = process.env.MINIO_USE_SSL === 'true' || endpoint.startsWith('https://')
 
         const minioClient = new Client({
             endPoint: host,
             port: parseInt(port),
-            useSSL: false,
+            useSSL: useSSL,
             accessKey: process.env.MINIO_ACCESS_KEY || 'minioadmin',
             secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin'
         })
@@ -84,9 +85,10 @@ export async function POST(
         )
         console.log(`✅ Successfully uploaded: ${fileName}`)
 
-        // Generuj URL - użyj HTTPS dla produkcji
-        const protocol = endpoint.includes('lumoria-studio.pl') ? 'https' : 'http'
-        const fileUrl = `${protocol}://${endpoint}/${bucket}/${fileName}`
+        // Generuj URL - użyj HTTPS jeśli endpoint zaczyna się od https://
+        const protocol = endpoint.startsWith('https://') ? 'https' : 'http'
+        const cleanEndpoint = endpoint.replace(/^https?:\/\//, '') // Usuń protokół z endpoint
+        const fileUrl = `${protocol}://${cleanEndpoint}/${bucket}/${fileName}`
         console.log(`🔗 Generated URL: ${fileUrl}`)
 
         res.json({
