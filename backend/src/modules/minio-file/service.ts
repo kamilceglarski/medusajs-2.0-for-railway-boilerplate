@@ -66,7 +66,8 @@ class MinioFileProviderService extends AbstractFileProviderService {
       ? sdkEndpoint.split(':')
       : [sdkEndpoint, defaultPort]
 
-    const useSSL = (process.env.MINIO_USE_SSL === 'true') || publicEndpoint.startsWith('https://')
+    // SSL powinno bazować na SDK endpoint lub explicite na MINIO_USE_SSL
+    const useSSL = (process.env.MINIO_USE_SSL === 'true') || sdkEndpointRaw.startsWith('https://')
 
     this.client = new Client({
       endPoint: host,

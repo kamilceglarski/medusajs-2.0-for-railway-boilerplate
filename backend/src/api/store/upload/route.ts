@@ -64,7 +64,8 @@ export async function POST(
         const defaultPort = process.env.MINIO_PORT || '9101'
         const [host, port] = sdkEndpoint.includes(':') ? sdkEndpoint.split(':') : [sdkEndpoint, defaultPort]
 
-        const useSSL = process.env.MINIO_USE_SSL === 'true' || publicEndpoint.startsWith('https://')
+        // SSL decyduj na podstawie SDK endpoint lub MINIO_USE_SSL, nie publicznego
+        const useSSL = process.env.MINIO_USE_SSL === 'true' || sdkEndpointRaw.startsWith('https://')
 
         const minioClient = new Client({
             endPoint: host,
