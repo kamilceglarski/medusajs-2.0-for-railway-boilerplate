@@ -64,7 +64,7 @@ export default function ContactPage() {
                                             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="text-[#1877F2]"><path d="M22 12.07C22 6.48 17.52 2 11.93 2 6.34 2 1.86 6.48 1.86 12.07c0 4.99 3.64 9.13 8.4 9.93v-7.02H7.9V12.1h2.36V9.83c0-2.33 1.39-3.62 3.52-3.62 1.02 0 2.1.18 2.1.18v2.31h-1.18c-1.16 0-1.52.72-1.52 1.46v1.94h2.59l-.41 2.88h-2.18V22c4.76-.8 8.4-4.94 8.4-9.93z" /></svg>
                                             <span className="underline text-lg">Facebook</span>
                                         </Link>
-                                        <Link href="https://www.instagram.com/lumoriastudio" target="_blank" rel="noreferrer" aria-label="Instagram Lumoria Studio" className="inline-flex items-center gap-2 hover:opacity-80">
+                                        <Link href="https://www.instagram.com/lumoria_studio/" target="_blank" rel="noreferrer" aria-label="Instagram Lumoria Studio" className="inline-flex items-center gap-2 hover:opacity-80">
                                             {/* Instagram icon */}
                                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#E1306C]"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.5" y2="6.5" /></svg>
                                             <span className="underline text-lg">Instagram</span>

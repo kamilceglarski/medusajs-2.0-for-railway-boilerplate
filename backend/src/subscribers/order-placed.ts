@@ -72,11 +72,47 @@ export default async function orderPlacedHandler({
         },
         order,
         shippingAddress,
-        preview: 'Dziękuję za złożenie zamówienia!'
+        preview: 'Dziękujemy za złożenie zamówienia!'
       }
     })
   } catch (error) {
     console.error('Error sending order confirmation notification:', error)
+  }
+
+  // Admin alert about new order
+  try {
+    await notificationModuleService.createNotifications([
+      {
+        to: 'kamilceglarski2002@gmail.com',
+        channel: 'email',
+        template: EmailTemplates.ORDER_PLACED,
+        data: {
+          emailOptions: {
+            replyTo: 'no-reply@lumoria-studio.pl',
+            subject: `Hej! Ktoś złożył zamówienie #${order.display_id} – sprawdź panel admin: lumoria-studio.pl/app`
+          },
+          order,
+          shippingAddress,
+          preview: 'Nowe zamówienie w sklepie Lumoria Studio'
+        }
+      },
+      {
+        to: 'grawer73@gmail.com',
+        channel: 'email',
+        template: EmailTemplates.ORDER_PLACED,
+        data: {
+          emailOptions: {
+            replyTo: 'no-reply@lumoria-studio.pl',
+            subject: `Hej! Ktoś złożył zamówienie #${order.display_id} – sprawdź panel admin: lumoria-studio.pl/app`
+          },
+          order,
+          shippingAddress,
+          preview: 'Nowe zamówienie w sklepie Lumoria Studio'
+        }
+      }
+    ])
+  } catch (e) {
+    console.error('Error sending admin order alert:', e)
   }
 }
 

@@ -204,17 +204,17 @@ const ServicesClient = () => {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 place-items-center">
                         {advantages.map((advantage, index) => (
                             <div
                                 key={index}
-                                className="text-center group"
+                                className="text-center group flex flex-col items-center"
                                 style={{
                                     animationDelay: `${index * 150}ms`,
                                     animation: isVisible ? 'fadeInUp 0.6s ease-out forwards' : 'none'
                                 }}
                             >
-                                <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
+                                <div className="w-16 h-16 mb-4 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
                                     {advantage.icon}
                                 </div>
                                 <h3 className="text-xl font-semibold text-slate-900 mb-2">
@@ -238,12 +238,12 @@ const ServicesClient = () => {
                     <p className="text-xl mb-8 opacity-90">
                         Skontaktuj się z nami i omówmy Twój pomysł. Stworzymy coś wyjątkowego!
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Button asChild size="large" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold">
-                            <Link href="/contact">Bezpłatna wycena</Link>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <Button asChild size="large" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold w-full sm:w-auto max-w-xs">
+                            <Link href="/contact" className="flex items-center justify-center w-full">Bezpłatna wycena</Link>
                         </Button>
-                        <Button asChild size="large" variant="transparent" className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold">
-                            <Link href="/store">Zobacz produkty</Link>
+                        <Button asChild size="large" variant="transparent" className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold w-full sm:w-auto max-w-xs">
+                            <Link href="/store" className="flex items-center justify-center w-full">Zobacz produkty</Link>
                         </Button>
                     </div>
                 </div>

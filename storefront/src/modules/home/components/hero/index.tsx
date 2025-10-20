@@ -95,7 +95,7 @@ const Hero = () => {
           })
         }}
       />
-      <section className="relative min-h-[100dvh] w-full overflow-hidden border-b border-ui-border-base bg-white -mt-16 pt-16" role="banner" aria-label="Główna sekcja Lumoria Studio">
+      <section className="relative min-h-[100dvh] w-full overflow-hidden border-b border-ui-border-base bg-white -mt-16 pt-16 pb-24 sm:pb-16" role="banner" aria-label="Główna sekcja Lumoria Studio">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
           {/* Floating geometric shapes */}
@@ -200,7 +200,7 @@ const Hero = () => {
 
         {/* Animated scroll arrow */}
         <div
-          className="absolute bottom-2 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+          className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20"
           onClick={scrollToNext}
           role="button"
           tabIndex={0}
