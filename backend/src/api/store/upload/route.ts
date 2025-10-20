@@ -53,11 +53,11 @@ export async function POST(
         const buffer = file.buffer
 
         // Utwórz MinIO client
-        // Publiczny endpoint do generowania URL-i (np. https://cdn.example.com)
-        const publicEndpoint = process.env.MINIO_ENDPOINT || 'localhost:9101'
+        // Publiczna baza URL do generowania linków (np. https://lumoria-studio.pl/minio)
+        const publicBaseRaw = process.env.MINIO_PUBLIC_BASE_URL || process.env.MINIO_ENDPOINT || 'localhost:9101'
 
         // Endpoint do połączenia SDK (np. 127.0.0.1:9101 lub minio:9000). Fallback do publicznego.
-        const sdkEndpointRaw = process.env.MINIO_SDK_ENDPOINT || publicEndpoint
+        const sdkEndpointRaw = process.env.MINIO_SDK_ENDPOINT || publicBaseRaw
 
         // Usuń protokół do połączenia SDK i do ewentualnego parsowania portu
         const sdkEndpoint = sdkEndpointRaw.replace(/^https?:\/\//, '')
@@ -95,10 +95,11 @@ export async function POST(
         )
         console.log(`✅ Successfully uploaded: ${fileName}`)
 
-        // Generuj URL - użyj HTTPS jeśli publicEndpoint zaczyna się od https://
-        const protocol = publicEndpoint.startsWith('https://') ? 'https' : 'http'
-        const cleanEndpoint = publicEndpoint.replace(/^https?:\/\//, '') // Usuń protokół z endpoint
-        const fileUrl = `${protocol}://${cleanEndpoint}/${bucket}/${fileName}`
+        // Generuj URL na bazie publicznej bazy (może zawierać ścieżkę, np. /minio)
+        const hasProtocol = /^https?:\/\//.test(publicBaseRaw)
+        const protocol = hasProtocol ? (publicBaseRaw.startsWith('https://') ? 'https' : 'http') : (process.env.MINIO_USE_SSL === 'true' ? 'https' : 'http')
+        const publicBase = hasProtocol ? publicBaseRaw.replace(/\/$/, '') : `${protocol}://${publicBaseRaw.replace(/\/$/, '')}`
+        const fileUrl = `${publicBase}/${bucket}/${fileName}`
         console.log(`🔗 Generated URL: ${fileUrl}`)
 
         res.json({

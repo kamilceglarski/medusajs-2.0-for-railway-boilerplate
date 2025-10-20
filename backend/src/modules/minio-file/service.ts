@@ -55,11 +55,11 @@ class MinioFileProviderService extends AbstractFileProviderService {
     this.logger_.info(`MinIO service initialized with bucket: ${this.bucket}`)
 
     // Initialize Minio client with configurable settings
-    // Public endpoint used for generated URLs (can include protocol)
-    const publicEndpoint = this.config_.endPoint
+    // Public base URL for generated links (can include path, e.g., https://domain/minio)
+    const publicBaseRaw = process.env.MINIO_PUBLIC_BASE_URL || this.config_.endPoint
 
     // SDK endpoint for internal connection (host:port), falls back to public
-    const sdkEndpointRaw = process.env.MINIO_SDK_ENDPOINT || publicEndpoint
+    const sdkEndpointRaw = process.env.MINIO_SDK_ENDPOINT || publicBaseRaw
     const sdkEndpoint = sdkEndpointRaw.replace(/^https?:\/\//, '')
     const defaultPort = process.env.MINIO_PORT || '9000'
     const [host, port] = sdkEndpoint.includes(':')
@@ -173,6 +173,7 @@ class MinioFileProviderService extends AbstractFileProviderService {
     }
 
     try {
+      const publicBaseRaw = process.env.MINIO_PUBLIC_BASE_URL || this.config_.endPoint
       const parsedFilename = path.parse(file.filename)
       const fileKey = `${parsedFilename.name}-${ulid()}${parsedFilename.ext}`
       const content = Buffer.from(file.content, 'binary')
@@ -190,10 +191,11 @@ class MinioFileProviderService extends AbstractFileProviderService {
         }
       )
 
-      // Generate public URL using the configured public endpoint and bucket
-      const protocol = this.config_.endPoint.startsWith('https://') ? 'https' : 'http'
-      const cleanEndpoint = this.config_.endPoint.replace(/^https?:\/\//, '')
-      const url = `${protocol}://${cleanEndpoint}/${this.bucket}/${fileKey}`
+      // Generate public URL using the configured public base (may include path)
+      const hasProtocol = /^https?:\/\//.test(publicBaseRaw)
+      const protocol = hasProtocol ? (publicBaseRaw.startsWith('https://') ? 'https' : 'http') : (process.env.MINIO_USE_SSL === 'true' ? 'https' : 'http')
+      const publicBase = hasProtocol ? publicBaseRaw.replace(/\/$/, '') : `${protocol}://${publicBaseRaw.replace(/\/$/, '')}`
+      const url = `${publicBase}/${this.bucket}/${fileKey}`
 
       this.logger_.info(`Successfully uploaded file ${fileKey} to MinIO bucket ${this.bucket}`)
 
