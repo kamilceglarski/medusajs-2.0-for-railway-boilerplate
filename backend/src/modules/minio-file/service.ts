@@ -55,15 +55,23 @@ class MinioFileProviderService extends AbstractFileProviderService {
     this.logger_.info(`MinIO service initialized with bucket: ${this.bucket}`)
 
     // Initialize Minio client with configurable settings
-    // Parse endpoint to extract host and port
-    const [host, port] = this.config_.endPoint.includes(':')
-      ? this.config_.endPoint.split(':')
-      : [this.config_.endPoint, '9000']
+    // Public endpoint used for generated URLs (can include protocol)
+    const publicEndpoint = this.config_.endPoint
+
+    // SDK endpoint for internal connection (host:port), falls back to public
+    const sdkEndpointRaw = process.env.MINIO_SDK_ENDPOINT || publicEndpoint
+    const sdkEndpoint = sdkEndpointRaw.replace(/^https?:\/\//, '')
+    const defaultPort = process.env.MINIO_PORT || '9000'
+    const [host, port] = sdkEndpoint.includes(':')
+      ? sdkEndpoint.split(':')
+      : [sdkEndpoint, defaultPort]
+
+    const useSSL = (process.env.MINIO_USE_SSL === 'true') || publicEndpoint.startsWith('https://')
 
     this.client = new Client({
       endPoint: host,
       port: parseInt(port),
-      useSSL: false,
+      useSSL,
       accessKey: this.config_.accessKey,
       secretKey: this.config_.secretKey
     })
@@ -181,8 +189,10 @@ class MinioFileProviderService extends AbstractFileProviderService {
         }
       )
 
-      // Generate URL using the endpoint and bucket
-      const url = `http://${this.config_.endPoint}/${this.bucket}/${fileKey}`
+      // Generate public URL using the configured public endpoint and bucket
+      const protocol = this.config_.endPoint.startsWith('https://') ? 'https' : 'http'
+      const cleanEndpoint = this.config_.endPoint.replace(/^https?:\/\//, '')
+      const url = `${protocol}://${cleanEndpoint}/${this.bucket}/${fileKey}`
 
       this.logger_.info(`Successfully uploaded file ${fileKey} to MinIO bucket ${this.bucket}`)
 
