@@ -9,7 +9,7 @@ const EmptyCartMessage = () => {
         level="h1"
         className="flex flex-row text-3xl-regular gap-x-2 items-baseline"
       >
-        Cart
+        Koszyk
       </Heading>
       <Text className="text-base-regular mt-4 mb-6 max-w-[32rem]">
         Nie masz jeszcze nic w koszyku. Zacznij przeglądać nasze produkty i

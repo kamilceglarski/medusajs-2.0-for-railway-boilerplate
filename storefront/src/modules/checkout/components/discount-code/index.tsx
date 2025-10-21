@@ -20,42 +20,36 @@ type DiscountCodeProps = {
 
 const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
   const [isOpen, setIsOpen] = React.useState(false)
+  const [message, formAction] = useFormState(submitPromotionForm, null)
+  const inputRef = React.useRef<HTMLInputElement>(null)
 
   const { items = [], promotions = [] } = cart
+
+  // Czyść input gdy kod został pomyślnie dodany (brak błędu i promocje zostały dodane)
+  React.useEffect(() => {
+    if (!message && inputRef.current) {
+      inputRef.current.value = ""
+    }
+  }, [message, promotions])
+
   const removePromotionCode = async (code: string) => {
-    const validPromotions = promotions.filter(
-      (promotion) => promotion.code !== code
-    )
+    try {
+      const validPromotions = promotions.filter(
+        (promotion) => promotion.code !== code
+      )
 
-    await applyPromotions(
-      validPromotions.filter((p) => p.code === undefined).map((p) => p.code!)
-    )
-  }
-
-  const addPromotionCode = async (formData: FormData) => {
-    const code = formData.get("code")
-    if (!code) {
-      return
-    }
-    const input = document.getElementById("promotion-input") as HTMLInputElement
-    const codes = promotions
-      .filter((p) => p.code === undefined)
-      .map((p) => p.code!)
-    codes.push(code.toString())
-
-    await applyPromotions(codes)
-
-    if (input) {
-      input.value = ""
+      await applyPromotions(
+        validPromotions.filter((p) => p.code !== undefined).map((p) => p.code!)
+      )
+    } catch (error) {
+      console.error("Error removing promotion code:", error)
     }
   }
-
-  const [message, formAction] = useFormState(submitPromotionForm, null)
 
   return (
     <div className="w-full bg-white flex flex-col">
       <div className="txt-medium">
-        <form action={(a) => addPromotionCode(a)} className="w-full mb-5">
+        <form action={formAction} className="w-full mb-5">
           <Label className="flex gap-x-1 my-2 items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -75,6 +69,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
             <>
               <div className="flex w-full gap-x-2">
                 <Input
+                  ref={inputRef}
                   className="size-full"
                   id="promotion-input"
                   name="code"

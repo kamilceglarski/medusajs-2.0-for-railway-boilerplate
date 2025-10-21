@@ -256,11 +256,18 @@ export async function applyPromotions(codes: string[]) {
     throw new Error("No existing cart found")
   }
 
-  await updateCart({ promo_codes: codes })
-    .then(() => {
-      revalidateTag("cart")
-    })
-    .catch(medusaError)
+  try {
+    await updateCart({ promo_codes: codes })
+    revalidateTag("cart")
+  } catch (error: any) {
+    // Sprawdź czy błąd dotyczy niepoprawnego kodu promocyjnego
+    const errorMessage = error?.message || String(error)
+    if (errorMessage.includes("promotion code") || errorMessage.includes("invalid")) {
+      throw new Error("Kod promocyjny jest nieprawidłowy")
+    }
+    // Inne błędy przekaż dalej
+    throw error
+  }
 }
 
 export async function applyGiftCard(code: string) {
@@ -311,10 +318,26 @@ export async function submitPromotionForm(
   formData: FormData
 ) {
   const code = formData.get("code") as string
+
+  // Walidacja - sprawdź czy kod nie jest pusty
+  if (!code || code.trim() === "") {
+    return "Proszę wprowadzić kod promocyjny"
+  }
+
   try {
     await applyPromotions([code])
+    return null // Sukces - brak błędu
   } catch (e: any) {
-    return e.message
+    // Zwróć przyjazną wiadomość o błędzie
+    const errorMessage = e?.message || String(e)
+
+    // Sprawdź czy błąd dotyczy niepoprawnego kodu promocyjnego
+    if (errorMessage.includes("promotion code") || errorMessage.includes("invalid") || errorMessage.includes("nieprawidłowy")) {
+      return "Kod promocyjny jest nieprawidłowy. Sprawdź poprawność kodu i spróbuj ponownie."
+    }
+
+    // Dla innych błędów zwróć ogólną wiadomość
+    return "Wystąpił błąd podczas aplikowania kodu promocyjnego. Spróbuj ponownie."
   }
 }
 
