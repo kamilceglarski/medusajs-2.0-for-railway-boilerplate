@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "@medusajs/ui"
 import { ArrowRightMini, CheckCircleSolid, StarSolid, Camera, ShieldCheck, CreditCard } from "@medusajs/icons"
-import Link from "next/link"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 const ServicesClient = () => {
     const [isVisible, setIsVisible] = useState(false)
@@ -125,10 +125,10 @@ const ServicesClient = () => {
                     {/* CTA Button */}
                     <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                         <Button asChild size="large" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
-                            <Link href="/store" className="flex items-center">
+                            <LocalizedClientLink href="/store" className="flex items-center">
                                 Zobacz nasze produkty
                                 <ArrowRightMini className="w-5 h-5 ml-2" />
-                            </Link>
+                            </LocalizedClientLink>
                         </Button>
                     </div>
                 </div>
@@ -240,10 +240,10 @@ const ServicesClient = () => {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <Button asChild size="large" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold w-full sm:w-auto max-w-xs">
-                            <Link href="/contact" className="flex items-center justify-center w-full">Bezpłatna wycena</Link>
+                            <LocalizedClientLink href="/contact" className="flex items-center justify-center w-full">Bezpłatna wycena</LocalizedClientLink>
                         </Button>
                         <Button asChild size="large" variant="transparent" className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold w-full sm:w-auto max-w-xs">
-                            <Link href="/store" className="flex items-center justify-center w-full">Zobacz produkty</Link>
+                            <LocalizedClientLink href="/store" className="flex items-center justify-center w-full">Zobacz produkty</LocalizedClientLink>
                         </Button>
                     </div>
                 </div>
