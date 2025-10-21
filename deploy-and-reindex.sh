@@ -48,7 +48,7 @@ echo -e "\n${YELLOW}Czy chcesz zrestartować frontend? (t/n)${NC}"
 read -r response
 if [[ "$response" =~ ^([tT][aA][kK]|[tT])$ ]]; then
     echo -e "${YELLOW}Restartowanie frontendu...${NC}"
-    pm2 restart medusa-frontend
+    pm2 restart next-frontend
     echo -e "${GREEN}✓ Frontend zrestartowany${NC}"
 fi
 
