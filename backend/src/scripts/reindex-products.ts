@@ -23,10 +23,11 @@ export default async function reindexProducts({ container }) {
 
         // Pobierz wszystkie produkty
         logger.info("Fetching all products...")
-        const [products] = await productModule.listProducts({}, {
+        const result = await productModule.listProducts({}, {
             relations: ["variants", "images"]
         })
 
+        const products = Array.isArray(result) ? result : (result?.products || [])
         logger.info(`Found ${products.length} products`)
 
         // Przygotuj dokumenty do indeksacji
