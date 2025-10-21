@@ -37,6 +37,7 @@ const nextConfig = {
         hostname: "medusa-server-testing.s3.us-east-1.amazonaws.com",
       },
     ],
+    unoptimized: true, // Wyłącz optymalizację dla lepszej kompatybilności z MinIO
   },
   serverRuntimeConfig: {
     port: process.env.PORT || 3000,
