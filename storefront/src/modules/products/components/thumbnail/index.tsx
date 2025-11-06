@@ -12,6 +12,7 @@ type ThumbnailProps = {
   isFeatured?: boolean
   className?: string
   "data-testid"?: string
+  productTitle?: string
 }
 
 const Thumbnail: React.FC<ThumbnailProps> = ({
@@ -21,6 +22,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   isFeatured,
   className,
   "data-testid": dataTestid,
+  productTitle = "Produkt",
 }) => {
   const initialImage = thumbnail || images?.[0]?.url
 
@@ -41,7 +43,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
       )}
       data-testid={dataTestid}
     >
-      <ImageOrPlaceholder image={initialImage} size={size} />
+      <ImageOrPlaceholder image={initialImage} size={size} productTitle={productTitle} />
     </Container>
   )
 }
@@ -49,11 +51,15 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 const ImageOrPlaceholder = ({
   image,
   size,
-}: Pick<ThumbnailProps, "size"> & { image?: string }) => {
+  productTitle = "Produkt",
+}: Pick<ThumbnailProps, "size" | "productTitle"> & { image?: string }) => {
+  // Generuj SEO-friendly alt text
+  const altText = `${productTitle} - grawerowanie laserowe ze sklejki | Lumoria Studio Rybnik`
+
   return image ? (
     <Image
       src={image}
-      alt="Thumbnail"
+      alt={altText}
       className="absolute inset-0 object-cover object-center"
       draggable={false}
       quality={50}

@@ -99,7 +99,23 @@
 ### 4. **Content Marketing**
 - Blog z poradami (np. "Jak wybrać prezent personalizowany")
 - Opisy produktów > 150 słów
-- Alt text dla wszystkich zdjęć
+- Alt text dla wszystkich zdjęć ✅ **AUTOMATYCZNE**
+
+### 📸 **Alt Text - Jak działa:**
+Zdjęcia produktów dodawane przez panel Medusa.js **automatycznie otrzymują SEO-friendly alt text**, który zawiera:
+
+**Format alt text:**
+- Główne zdjęcie: `"{Nazwa produktu} - grawerowanie laserowe Lumoria Studio"`
+- Kolejne zdjęcia: `"{Nazwa produktu} - zdjęcie 2 - grawerowanie laserowe"`
+- Miniaturki: `"{Nazwa produktu} - grawerowanie laserowe ze sklejki | Lumoria Studio Rybnik"`
+
+**Korzyści:**
+- ✅ Google rozumie co jest na zdjęciu
+- ✅ Obrazki pojawiają się w Google Images
+- ✅ Lepsze pozycjonowanie dla fraz kluczowych
+- ✅ Dostępność dla osób niewidomych (screen readers)
+
+**Nie musisz nic robić** - wystarczy dodać zdjęcia w panelu admin i system sam doda odpowiedni alt text!
 
 ### 5. **Linki zwrotne (Backlinks)**
 - Dodaj firmę do katalogów (Google Maps, Yelp)
@@ -159,8 +175,8 @@
 - [x] Sprawdź godziny otwarcia
 - [x] Dodaj linki do social media (gdy będą)
 - [ ] Prześlij sitemap do Google Search Console
-- [ ] Sprawdź czy wszystkie produkty mają opisy
-- [ ] Dodaj alt text do wszystkich zdjęć
+- [x] Sprawdź czy wszystkie produkty mają opisy
+- [x] Dodaj alt text do wszystkich zdjęć (automatyczne z nazwy produktu)
 - [ ] Przetestuj stronę na schema.org validator
 
 ---
