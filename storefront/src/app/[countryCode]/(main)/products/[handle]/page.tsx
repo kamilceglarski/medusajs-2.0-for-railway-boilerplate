@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import ProductTemplate from "@modules/products/templates"
 import { getRegion, listRegions } from "@lib/data/regions"
 import { getProductByHandle, getProductsList } from "@lib/data/products"
+import ProductStructuredData from "@components/structured-data/product-schema"
 
 type Props = {
   params: { countryCode: string; handle: string }
@@ -57,12 +58,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${product.title} | Medusa Store`,
-    description: `${product.title}`,
+    title: `${product.title} - Grawerowanie laserowe | Lumoria Studio`,
+    description: product.description || `${product.title} - precyzyjne grawerowanie laserowe. Szybka realizacja 2-3 dni. Wysoka jakość. Personalizacja.`,
+    keywords: [
+      product.title,
+      "grawerowanie laserowe",
+      "dekoracje ze sklejki",
+      "personalizacja",
+      "prezent",
+    ],
     openGraph: {
-      title: `${product.title} | Medusa Store`,
-      description: `${product.title}`,
+      title: `${product.title} | Lumoria Studio`,
+      description: product.description || `${product.title} - grawerowanie laserowe`,
       images: product.thumbnail ? [product.thumbnail] : [],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.title} | Lumoria Studio`,
+      description: product.description || product.title,
+      images: product.thumbnail ? [product.thumbnail] : [],
+    },
+    alternates: {
+      canonical: `/${params.countryCode}/products/${handle}`,
     },
   }
 }
@@ -80,10 +98,16 @@ export default async function ProductPage({ params }: Props) {
   }
 
   return (
-    <ProductTemplate
-      product={pricedProduct}
-      region={region}
-      countryCode={params.countryCode}
-    />
+    <>
+      <ProductStructuredData
+        product={pricedProduct}
+        countryCode={params.countryCode}
+      />
+      <ProductTemplate
+        product={pricedProduct}
+        region={region}
+        countryCode={params.countryCode}
+      />
+    </>
   )
 }
