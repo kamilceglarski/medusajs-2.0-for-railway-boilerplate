@@ -53,7 +53,7 @@ export const getProductsList = cache(async function ({
   nextPage: number | null
   queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams
 }> {
-  const limit = queryParams?.limit || 12
+  const limit = queryParams?.limit || 24
   const validPageParam = Math.max(pageParam, 1);
   const offset = (validPageParam - 1) * limit
   const region = await getRegion(countryCode)
@@ -108,7 +108,7 @@ export const getProductsListWithSort = cache(async function ({
   nextPage: number | null
   queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams
 }> {
-  const limit = queryParams?.limit || 12
+  const limit = queryParams?.limit || 24
 
   const {
     response: { products, count },

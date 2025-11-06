@@ -20,7 +20,7 @@ const Login = ({ setCurrentView }: Props) => {
     >
       <h1 className="text-large-semi uppercase mb-6">Witaj z powrotem</h1>
       <p className="text-center text-base-regular text-ui-fg-base mb-8">
-        Zaloguj się, aby uzyskać dostęp do ulepszonego doświadczenia zakupowego.
+        Zaloguj się i zyskaj więcej możliwości zakupowych.
       </p>
       <form className="w-full" action={formAction}>
         <div className="flex flex-col w-full gap-y-2">
