@@ -149,10 +149,10 @@ const Hero = () => {
 
               {/* CTA Buttons */}
               <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 items-center sm:items-start transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} role="group" aria-label="Główne akcje">
-                <Button asChild size="large" variant="primary" className="text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold w-full sm:w-auto" style={{ backgroundColor: '#0E3E4D' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0A2F3A'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0E3E4D'} aria-label="Przejdź do katalogu produktów Lumoria Studio">
-                  <LocalizedClientLink href="/store">Zobacz nasze produkty</LocalizedClientLink>
+                <Button asChild size="large" variant="primary" className="text-white px-8 sm:px-10 py-4 sm:py-5 text-lg sm:text-xl font-bold w-full sm:w-auto shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300" style={{ backgroundColor: '#0E3E4D' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0A2F3A'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0E3E4D'} aria-label="Przejdź do katalogu produktów Lumoria Studio">
+                  <LocalizedClientLink href="/store">🛍️ Zobacz nasze produkty</LocalizedClientLink>
                 </Button>
-                <Button asChild size="large" variant="secondary" className="border-2 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold w-full sm:w-auto" style={{ borderColor: '#B57641', color: '#B57641' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#B57641'; e.currentTarget.style.color = 'white'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#B57641'; }} aria-label="Zamów bezpłatną wycenę grawerowania laserowego">
+                <Button asChild size="large" variant="secondary" className="border-2 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold w-full sm:w-auto hover:scale-105 transition-transform duration-300" style={{ borderColor: '#B57641', color: '#B57641' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#B57641'; e.currentTarget.style.color = 'white'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#B57641'; }} aria-label="Zamów bezpłatną wycenę grawerowania laserowego">
                   <LocalizedClientLink href="/contact">Bezpłatna wycena</LocalizedClientLink>
                 </Button>
               </div>

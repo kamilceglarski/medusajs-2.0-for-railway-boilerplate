@@ -10,6 +10,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import { HttpTypes } from "@medusajs/types"
 import { listCategories } from "@lib/data/categories"
 import CategoriesFilter from "@modules/store/components/refinement-list/categories-filter"
+import SubcategoriesGrid from "@modules/categories/components/subcategories-grid"
 
 export default function CategoryTemplate({
   categories,
@@ -65,18 +66,11 @@ export default function CategoryTemplate({
             <p>{category.description}</p>
           </div>
         )}
-        {category.category_children && (
-          <div className="mb-8 text-base-large">
-            <ul className="grid grid-cols-1 gap-2">
-              {category.category_children?.map((c) => (
-                <li key={c.id}>
-                  <InteractiveLink href={`/categories/${c.handle}`}>
-                    {c.name}
-                  </InteractiveLink>
-                </li>
-              ))}
-            </ul>
-          </div>
+        {category.category_children && category.category_children.length > 0 && (
+          <SubcategoriesGrid
+            subcategories={category.category_children}
+            countryCode={countryCode}
+          />
         )}
         <Suspense fallback={<SkeletonProductGrid />}>
           <PaginatedProducts

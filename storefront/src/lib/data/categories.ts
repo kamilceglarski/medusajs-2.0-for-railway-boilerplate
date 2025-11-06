@@ -5,7 +5,7 @@ export const listCategories = cache(async function () {
   // Ensure we fetch enough categories to avoid pagination issues
   return sdk.store.category
     .list(
-      { fields: "+category_children", limit: 1000, offset: 0 },
+      { fields: "+category_children,+parent_category_id", limit: 1000, offset: 0 },
       { next: { tags: ["categories"] } }
     )
     .then(({ product_categories }) => product_categories)

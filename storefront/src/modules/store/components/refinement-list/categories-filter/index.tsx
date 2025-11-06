@@ -3,7 +3,13 @@
 import { usePathname, useRouter } from "next/navigation"
 import FilterRadioGroup from "@modules/common/components/filter-radio-group"
 
-export type CategoryItem = { id: string; name: string; handle: string }
+export type CategoryItem = {
+  id: string
+  name: string
+  handle: string
+  category_children?: CategoryItem[]
+  parent_category_id?: string | null
+}
 
 const ALL_VALUE = "__all__"
 
@@ -21,11 +27,39 @@ const CategoriesFilter = ({
   const router = useRouter()
   const pathname = usePathname()
 
-  const items = [
-    { value: ALL_VALUE, label: "Wszystkie produkty" },
-    ...categories.map((c) => ({ value: c.handle, label: c.name })),
-  ]
+  // Funkcja do budowania płaskiej listy z hierarchią
+  const buildHierarchicalItems = () => {
+    const items: { value: string; label: string; indent?: number }[] = [
+      { value: ALL_VALUE, label: "Wszystkie produkty" }
+    ]
 
+    // Filtruj tylko kategorie główne (bez rodzica)
+    const mainCategories = categories.filter(c => !c.parent_category_id)
+
+    mainCategories.forEach((category) => {
+      // Dodaj główną kategorię
+      items.push({
+        value: category.handle,
+        label: category.name,
+        indent: 0
+      })
+
+      // Dodaj podkategorie z wcięciem
+      if (category.category_children && category.category_children.length > 0) {
+        category.category_children.forEach((subcat) => {
+          items.push({
+            value: subcat.handle,
+            label: `  └ ${subcat.name}`,
+            indent: 1
+          })
+        })
+      }
+    })
+
+    return items
+  }
+
+  const items = buildHierarchicalItems()
   const currentValue = selectedHandle ?? ALL_VALUE
 
   const handleChange = (value: string) => {

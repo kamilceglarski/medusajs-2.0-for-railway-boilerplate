@@ -173,8 +173,9 @@ export default function ProductActions({
           />
         </div>
 
-        {/* Quantity selector (centered, above price) */}
-        <div className="flex flex-col items-center gap-3">
+        {/* Quantity selector (left-aligned, with label) */}
+        <div className="flex flex-col items-start gap-3">
+          <p className="text-sm font-medium text-ui-fg-base">Ilość:</p>
           <div className="flex items-center border border-ui-border-base rounded-md overflow-hidden">
             <button
               type="button"
