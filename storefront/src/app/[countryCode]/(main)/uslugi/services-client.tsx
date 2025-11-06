@@ -204,18 +204,20 @@ const ServicesClient = () => {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 place-items-center">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
                         {advantages.map((advantage, index) => (
                             <div
                                 key={index}
-                                className="text-center group flex flex-col items-center"
+                                className="flex flex-col items-center text-center group"
                                 style={{
                                     animationDelay: `${index * 150}ms`,
                                     animation: isVisible ? 'fadeInUp 0.6s ease-out forwards' : 'none'
                                 }}
                             >
-                                <div className="w-16 h-16 mb-4 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
-                                    {advantage.icon}
+                                <div className="w-16 h-16 mb-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+                                    <div className="flex items-center justify-center w-full h-full ml-0.5 mt-0.5">
+                                        {advantage.icon}
+                                    </div>
                                 </div>
                                 <h3 className="text-xl font-semibold text-slate-900 mb-2">
                                     {advantage.title}

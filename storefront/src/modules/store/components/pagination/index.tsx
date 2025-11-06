@@ -108,7 +108,32 @@ export function Pagination({
   // Render the component
   return (
     <div className="flex justify-center w-full mt-12">
-      <div className="flex gap-3 items-end" data-testid={dataTestid}>{renderPageButtons()}</div>
+      <div className="flex gap-3 items-center" data-testid={dataTestid}>
+        {/* Previous Button */}
+        <button
+          className="px-4 py-2 rounded-md border border-ui-border-base text-ui-fg-muted hover:text-ui-fg-subtle hover:border-ui-fg-subtle disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          disabled={page === 1}
+          onClick={() => handlePageChange(page - 1)}
+          aria-label="Poprzednia strona"
+        >
+          ←
+        </button>
+
+        {/* Page Numbers */}
+        <div className="flex gap-3 items-end">
+          {renderPageButtons()}
+        </div>
+
+        {/* Next Button */}
+        <button
+          className="px-4 py-2 rounded-md border border-ui-border-base text-ui-fg-muted hover:text-ui-fg-subtle hover:border-ui-fg-subtle disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          disabled={page === totalPages}
+          onClick={() => handlePageChange(page + 1)}
+          aria-label="Następna strona"
+        >
+          →
+        </button>
+      </div>
     </div>
   )
 }

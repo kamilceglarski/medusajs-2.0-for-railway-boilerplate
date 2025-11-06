@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { Button } from "@medusajs/ui"
@@ -67,8 +67,8 @@ const Hero = () => {
             "name": "Lumoria Studio",
             "description": "Tworzymy wyjątkowe dekoracje i precyzyjne grawery ze sklejki. Personalizowane tabliczki, dekoracje ślubne, prezenty i gadżety firmowe.",
             "url": "https://lumoria-studio.com",
-            "logo": "https://lumoria-studio.com/images/LOGO_DUZE_JAKOSC.png",
-            "image": "https://lumoria-studio.com/images/LOGO_DUZE_JAKOSC.png",
+            "logo": "https://lumoria-studio.com/images/LOGO_DUZE_JAKOSC_2.webp",
+            "image": "https://lumoria-studio.com/images/LOGO_DUZE_JAKOSC_2.webp",
             "sameAs": [],
             "contactPoint": {
               "@type": "ContactPoint",
@@ -114,25 +114,20 @@ const Hero = () => {
         <div className="relative z-10 min-h-full w-full flex items-center py-8 sm:py-12">
           <div className="content-container px-4 sm:px-6 lg:px-8 w-full">
             <div className="max-w-4xl">
-              {/* Logo and Badge - Centered on mobile, left aligned on desktop */}
+              {/* Logo - Centered on mobile, left aligned on desktop */}
               <div className={`flex flex-col sm:flex-row items-center sm:items-start sm:items-center gap-6 mb-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 {/* Logo */}
                 <div className="flex-shrink-0">
                   <Image
-                    src="/images/LOGO_DUZE_JAKOSC.png"
+                    src="/images/LOGO_DUZE_JAKOSC_2.webp"
                     alt="Lumoria Studio - Logo firmy specjalizującej się w precyzyjnym grawerowaniu laserowym i dekoracjach ze sklejki"
                     width={240}
                     height={120}
                     className="h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36 w-auto object-contain drop-shadow-lg"
                     priority
+                    unoptimized
                     aria-label="Logo Lumoria Studio"
                   />
-                </div>
-
-                {/* Badge */}
-                <div className="inline-flex items-center px-6 py-3 rounded-full text-base font-medium shadow-md" style={{ backgroundColor: '#0E3E4D20', color: '#0E3E4D' }}>
-                  <span className="w-2 h-2 rounded-full mr-3 animate-pulse" style={{ backgroundColor: '#0E3E4D' }}></span>
-                  ✨ Precyzyjne grawerowanie laserowe
                 </div>
               </div>
 
@@ -155,10 +150,10 @@ const Hero = () => {
               {/* CTA Buttons */}
               <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 items-center sm:items-start transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} role="group" aria-label="Główne akcje">
                 <Button asChild size="large" variant="primary" className="text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold w-full sm:w-auto" style={{ backgroundColor: '#0E3E4D' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#0A2F3A'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0E3E4D'} aria-label="Przejdź do katalogu produktów Lumoria Studio">
-                  <Link href="/store">Zobacz nasze produkty</Link>
+                  <LocalizedClientLink href="/store">Zobacz nasze produkty</LocalizedClientLink>
                 </Button>
                 <Button asChild size="large" variant="secondary" className="border-2 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold w-full sm:w-auto" style={{ borderColor: '#B57641', color: '#B57641' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#B57641'; e.currentTarget.style.color = 'white'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#B57641'; }} aria-label="Zamów bezpłatną wycenę grawerowania laserowego">
-                  <Link href="/contact">Bezpłatna wycena</Link>
+                  <LocalizedClientLink href="/contact">Bezpłatna wycena</LocalizedClientLink>
                 </Button>
               </div>
 

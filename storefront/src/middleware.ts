@@ -94,7 +94,7 @@ async function checkAndCleanCompletedCart(
   const cartIdCookie = request.cookies.get("_medusa_cart_id")?.value
 
   // Sprawdź tylko na ważnych stronach (checkout, cart)
-  const shouldCheck = 
+  const shouldCheck =
     request.nextUrl.pathname.includes('/checkout') ||
     request.nextUrl.pathname.includes('/cart')
 
@@ -115,7 +115,7 @@ async function checkAndCleanCompletedCart(
 
     if (cartResponse.ok) {
       const { cart } = await cartResponse.json()
-      
+
       // Jeśli koszyk jest completed, wyczyść cookie
       if (cart?.completed_at) {
         console.log('[Middleware] Completed cart detected, clearing cookie:', cartIdCookie)
@@ -197,5 +197,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|favicon.ico|.*\\.png|.*\\.jpg|.*\\.gif|.*\\.svg).*)"], // prevents redirecting on static files
+  matcher: ["/((?!api|_next/static|favicon.ico|.*\\.png|.*\\.jpg|.*\\.gif|.*\\.svg|.*\\.webp).*)"], // prevents redirecting on static files
 }

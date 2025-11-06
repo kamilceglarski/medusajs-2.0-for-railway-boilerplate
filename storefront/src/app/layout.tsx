@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     description: "Tworzymy wyjątkowe dekoracje i precyzyjne grawery ze sklejki. Personalizowane tabliczki, dekoracje ślubne, prezenty i gadżety firmowe.",
     images: [
       {
-        url: "/images/LOGO_DUZE_JAKOSC.png",
+        url: "/images/LOGO_DUZE_JAKOSC_2.webp",
         width: 1200,
         height: 630,
         alt: "Lumoria Studio - Precyzyjne grawerowanie laserowe",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Lumoria Studio - Precyzyjne grawerowanie laserowe",
     description: "Tworzymy wyjątkowe dekoracje i precyzyjne grawery ze sklejki. Szybka realizacja 2-3 dni robocze.",
-    images: ["/images/LOGO_DUZE_JAKOSC.png"],
+    images: ["/images/LOGO_DUZE_JAKOSC_2.webp"],
   },
   alternates: {
     canonical: getBaseURL(),

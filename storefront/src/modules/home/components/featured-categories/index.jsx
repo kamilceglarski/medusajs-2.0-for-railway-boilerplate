@@ -6,22 +6,22 @@ import Image from "next/image"
 // ZMIANA: Nowe, dopracowane opisy i te same dane co poprzednio
 const popularCategories = [
   {
-    name: "Dekoracje Ścienne",
-    description: "Ożyw swoje ściany unikalnymi mapami, mandalami i cytatami wyciętymi z laserową precyzją.",
+    name: "Boże Narodzenie",
+    description: "Dodaj magii świętom dzięki naszym wyjątkowym ozdobom świątecznym, aniołkom i dekoracjom bożonarodzeniowym.",
     imageUrl: "/images/kategoria-dekoracje.jpg",
-    handle: "/categories/dekoracje-scienne",
+    handle: "/categories/boze-narodzenie",
   },
   {
-    name: "Personalizowane Prezenty",
-    description: "Podaruj coś wyjątkowego. Grawerujemy Twoje pomysły na drewnie i szkle, tworząc pamiątki na lata.",
+    name: "Urodziny",
+    description: "Uczyń każde urodziny niezapomnianymi. Spersonalizowane prezenty i dekoracje na wyjątkowe chwile.",
     imageUrl: "/images/kategoria-prezenty.jpg",
-    handle: "/categories/personalizowane-prezenty",
+    handle: "/categories/urodziny",
   },
   {
-    name: "Ozdoby Sezonowe",
-    description: "Dodaj magii świętom i specjalnym okazjom dzięki naszym ozdobom na Boże Narodzenie, Wielkanoc i nie tylko.",
+    name: "Produkty Personalizowane",
+    description: "Stwórz coś wyjątkowego. Grawerujemy Twoje pomysły na drewnie i szkle, tworząc unikalne pamiątki.",
     imageUrl: "/images/kategoria-ozdoby.jpg",
-    handle: "/categories/ozdoby-sezonowe",
+    handle: "/categories/produkty-personalizowane",
   },
 ]
 
