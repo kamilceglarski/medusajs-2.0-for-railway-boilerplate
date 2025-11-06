@@ -6,7 +6,6 @@ type FilterRadioGroupProps = {
   items: {
     value: string
     label: string
-    indent?: number
   }[]
   value: any
   handleChange: (...args: any[]) => void
@@ -29,7 +28,6 @@ const FilterRadioGroup = ({
             key={i.value}
             className={clx("flex gap-x-2 items-center", {
               "ml-[-23px]": i.value === value,
-              "pl-6": i.indent === 1, // Wcięcie dla podkategorii
             })}
           >
             {i.value === value && <EllipseMiniSolid />}
@@ -45,8 +43,6 @@ const FilterRadioGroup = ({
                 "!txt-compact-small !transform-none text-ui-fg-subtle hover:cursor-pointer",
                 {
                   "text-ui-fg-base": i.value === value,
-                  "font-semibold": i.indent === 0 || !i.indent, // Pogrubienie dla głównych kategorii
-                  "text-xs opacity-80": i.indent === 1, // Mniejszy font i przyciemnienie dla podkategorii
                 }
               )}
               data-testid="radio-label"
