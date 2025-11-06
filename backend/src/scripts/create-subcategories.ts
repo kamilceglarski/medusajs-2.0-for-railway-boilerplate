@@ -25,81 +25,27 @@ export default async function createSubcategories({
             is_active: true,
         })
 
-        const personalizowane = await categoryModuleService.create({
-            name: "Produkty Personalizowane",
-            handle: "produkty-personalizowane",
-            description: "Produkty z grawerowaniem i personalizacją",
+        const walentynki = await categoryModuleService.create({
+            name: "Walentynki",
+            handle: "walentynki",
+            description: "Romantyczne dekoracje i prezenty",
             is_active: true,
         })
 
         logger.info("✅ Utworzono kategorie główne")
 
-        // 2. Dodaj podkategorie do "Boże Narodzenie"
+        // 2. Dodaj podkategorię "Toppery" do "Urodziny"
         await categoryModuleService.create({
-            name: "Ozdoby choinkowe",
-            handle: "ozdoby-choinkowe",
-            description: "Piękne ozdoby na choinkę",
-            parent_category_id: bozeNarodzenie.id,
-            is_active: true,
-        })
-
-        await categoryModuleService.create({
-            name: "Dekoracje stołu",
-            handle: "dekoracje-stolu",
-            description: "Świąteczne dekoracje na stół",
-            parent_category_id: bozeNarodzenie.id,
-            is_active: true,
-        })
-
-        await categoryModuleService.create({
-            name: "Bombki personalizowane",
-            handle: "bombki-personalizowane",
-            description: "Bombki z grawerowaniem",
-            parent_category_id: bozeNarodzenie.id,
-            is_active: true,
-        })
-
-        logger.info("✅ Dodano podkategorie do 'Boże Narodzenie'")
-
-        // 3. Dodaj podkategorie do "Urodziny"
-        await categoryModuleService.create({
-            name: "Dekoracje urodzinowe",
-            handle: "dekoracje-urodzinowe",
-            description: "Dekoracje na przyjęcia urodzinowe",
+            name: "Toppery",
+            handle: "toppery",
+            description: "Toppery na tort urodzinowy",
             parent_category_id: urodziny.id,
             is_active: true,
         })
 
-        await categoryModuleService.create({
-            name: "Napisy urodzinowe",
-            handle: "napisy-urodzinowe",
-            description: "Grawerowane napisy urodzinowe",
-            parent_category_id: urodziny.id,
-            is_active: true,
-        })
+        logger.info("✅ Dodano podkategorię 'Toppery' do 'Urodziny'")
 
-        logger.info("✅ Dodano podkategorie do 'Urodziny'")
-
-        // 4. Dodaj podkategorie do "Produkty Personalizowane"
-        await categoryModuleService.create({
-            name: "Tabliczki z nazwiskami",
-            handle: "tabliczki-z-nazwiskami",
-            description: "Personalizowane tabliczki",
-            parent_category_id: personalizowane.id,
-            is_active: true,
-        })
-
-        await categoryModuleService.create({
-            name: "Grawerowane pudełka",
-            handle: "grawerowane-pudelka",
-            description: "Pudełka drewniane z grawerowaniem",
-            parent_category_id: personalizowane.id,
-            is_active: true,
-        })
-
-        logger.info("✅ Dodano podkategorie do 'Produkty Personalizowane'")
-
-        logger.info("🎉 Wszystkie kategorie i podkategorie zostały utworzone!")
+        logger.info("🎉 Wszystkie kategorie zostały utworzone!")
 
     } catch (error) {
         logger.error("❌ Błąd podczas tworzenia kategorii:", error)
