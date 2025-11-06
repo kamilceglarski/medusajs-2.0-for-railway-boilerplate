@@ -24,9 +24,18 @@ if (fs.existsSync(envPath)) {
   );
 }
 
-// Install dependencies
-console.log('Installing dependencies in .medusa/server...');
-execSync('pnpm i --prod --frozen-lockfile', { 
-  cwd: MEDUSA_SERVER_PATH,
-  stdio: 'inherit'
-});
+// Install dependencies with a safe fallback
+console.log('Installing dependencies in .medusa/server (frozen-lockfile)...');
+try {
+  execSync('pnpm i --prod --frozen-lockfile', {
+    cwd: MEDUSA_SERVER_PATH,
+    stdio: 'inherit',
+  });
+} catch (e) {
+  console.warn('\n[fallback] pnpm install with --frozen-lockfile failed due to an outdated lockfile.');
+  console.warn('[fallback] Retrying with --no-frozen-lockfile to regenerate lockfile...\n');
+  execSync('pnpm i --prod --no-frozen-lockfile', {
+    cwd: MEDUSA_SERVER_PATH,
+    stdio: 'inherit',
+  });
+}
