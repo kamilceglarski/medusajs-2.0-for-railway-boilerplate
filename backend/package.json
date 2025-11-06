@@ -13,8 +13,9 @@
     "medusa"
   ],
   "scripts": {
-    "build": "medusa build && node src/scripts/postBuild.js",
+    "build": "medusa build && node src/scripts/postBuild.js && npm run update-categories",
     "seed": "medusa exec ./src/scripts/seed.ts",
+    "update-categories": "medusa exec ./src/scripts/update-categories.ts",
     "ib": "init-backend",
     "start": "init-backend && cd .medusa/server && medusa start --verbose",
     "dev": "medusa develop",
