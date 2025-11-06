@@ -84,7 +84,7 @@
 
 ### 1. **Google Search Console**
 - ✅ Już masz weryfikację: `j5eg3CSJw6IRTiZrMfQg2JDzz_rTsjuXg-Y8eCDyi0I`
-- 📤 Prześlij sitemap: `https://twoja-domena.pl/sitemap.xml`
+- 📤 Prześlij sitemap: `https://lumoria-studio.pl/pl/sitemap.xml`
 
 ### 2. **Google Business Profile**
 - Załóż profil firmy w Google

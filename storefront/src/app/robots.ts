@@ -43,7 +43,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/account/", "/checkout/", "/cart/"],
       },
     ],
-    sitemap: `${base}/sitemap.xml`,
+    sitemap: `${base}/pl/sitemap.xml`,
   }
 }
 
