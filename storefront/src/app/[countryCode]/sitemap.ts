@@ -4,7 +4,7 @@ import { getProductsList } from "@lib/data/products"
 import { getCollectionsList } from "@lib/data/collections"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_STOREFRONT_URL || "http://localhost:8000"
+  const base = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_STOREFRONT_URL || "http://localhost:8000"
   const country = "pl"
 
   const urls: MetadataRoute.Sitemap = [
