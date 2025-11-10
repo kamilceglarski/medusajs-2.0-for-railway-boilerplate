@@ -8,19 +8,19 @@ const popularCategories = [
   {
     name: "Boże Narodzenie",
     description: "Dodaj magii świętom dzięki naszym wyjątkowym ozdobom świątecznym, aniołkom i dekoracjom bożonarodzeniowym.",
-    imageUrl: "/images/kategoria-dekoracje.jpg",
+    imageUrl: "/images/odkryjNaszeKategorieBozeNarodzenie.webp",
     handle: "/categories/boze-narodzenie",
   },
   {
     name: "Urodziny",
     description: "Uczyń każde urodziny niezapomnianymi. Spersonalizowane prezenty i dekoracje na wyjątkowe chwile.",
-    imageUrl: "/images/kategoria-prezenty.jpg",
+    imageUrl: "/images/odkryjNaszeKategorieUrodziny.webp",
     handle: "/categories/urodziny",
   },
   {
     name: "Produkty Personalizowane",
     description: "Stwórz coś wyjątkowego. Grawerujemy Twoje pomysły na drewnie i szkle, tworząc unikalne pamiątki.",
-    imageUrl: "/images/kategoria-ozdoby.jpg",
+    imageUrl: "/images/odkryjNaszeKategorieProduktyPersonalizowane.webp",
     handle: "/categories/produkty-personalizowane",
   },
 ]
