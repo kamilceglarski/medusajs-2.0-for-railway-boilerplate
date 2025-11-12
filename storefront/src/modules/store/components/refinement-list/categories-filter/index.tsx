@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation"
 import FilterRadioGroup from "@modules/common/components/filter-radio-group"
+import normalizeHandle from "@lib/util/normalize-handle"
 
 export type CategoryItem = {
   id: string
@@ -39,7 +40,7 @@ const CategoriesFilter = ({
     mainCategories.forEach((category) => {
       // Dodaj główną kategorię
       items.push({
-        value: category.handle,
+        value: normalizeHandle(category.handle || category.name),
         label: category.name,
         indent: 0
       })
@@ -48,7 +49,7 @@ const CategoriesFilter = ({
       if (category.category_children && category.category_children.length > 0) {
         category.category_children.forEach((subcat) => {
           items.push({
-            value: subcat.handle,
+            value: normalizeHandle(subcat.handle || subcat.name),
             label: `  └ ${subcat.name}`,
             indent: 1
           })

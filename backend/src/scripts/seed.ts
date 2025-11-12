@@ -19,6 +19,7 @@ import {
   linkSalesChannelsToStockLocationWorkflow,
   updateStoresWorkflow,
 } from "@medusajs/medusa/core-flows";
+import slugify from "slugify";
 
 export default async function seedDemoData({ container }: ExecArgs) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER);
@@ -139,16 +140,16 @@ export default async function seedDemoData({ container }: ExecArgs) {
 
   if (!shippingProfile) {
     const { result: shippingProfileResult } =
-    await createShippingProfilesWorkflow(container).run({
-      input: {
-        data: [
-          {
-            name: "Default Shipping Profile",
-            type: "default",
-          },
-        ],
-      },
-    });
+      await createShippingProfilesWorkflow(container).run({
+        input: {
+          data: [
+            {
+              name: "Default Shipping Profile",
+              type: "default",
+            },
+          ],
+        },
+      });
     shippingProfile = shippingProfileResult[0];
   }
 
@@ -324,18 +325,22 @@ export default async function seedDemoData({ container }: ExecArgs) {
       product_categories: [
         {
           name: "Shirts",
+          handle: slugify("Shirts", { lower: true, strict: true }),
           is_active: true,
         },
         {
           name: "Sweatshirts",
+          handle: slugify("Sweatshirts", { lower: true, strict: true }),
           is_active: true,
         },
         {
           name: "Pants",
+          handle: slugify("Pants", { lower: true, strict: true }),
           is_active: true,
         },
         {
           name: "Merch",
+          handle: slugify("Merch", { lower: true, strict: true }),
           is_active: true,
         },
       ],
@@ -352,7 +357,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
           ],
           description:
             "Reimagine the feeling of a classic T-shirt. With our cotton T-shirts, everyday essentials no longer have to be ordinary.",
-          handle: "t-shirt",
+          handle: slugify("Medusa T-Shirt", { lower: true, strict: true }),
           weight: 400,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -539,7 +544,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
           ],
           description:
             "Reimagine the feeling of a classic sweatshirt. With our cotton sweatshirt, everyday essentials no longer have to be ordinary.",
-          handle: "sweatshirt",
+          handle: slugify("Medusa Sweatshirt", { lower: true, strict: true }),
           weight: 400,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -640,7 +645,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
           ],
           description:
             "Reimagine the feeling of classic sweatpants. With our cotton sweatpants, everyday essentials no longer have to be ordinary.",
-          handle: "sweatpants",
+          handle: slugify("Medusa Sweatpants", { lower: true, strict: true }),
           weight: 400,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -741,7 +746,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
           ],
           description:
             "Reimagine the feeling of classic shorts. With our cotton shorts, everyday essentials no longer have to be ordinary.",
-          handle: "shorts",
+          handle: slugify("Medusa Shorts", { lower: true, strict: true }),
           weight: 400,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,

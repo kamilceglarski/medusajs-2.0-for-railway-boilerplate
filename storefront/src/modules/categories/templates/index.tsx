@@ -7,6 +7,7 @@ import RefinementList from "@modules/store/components/refinement-list"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import PaginatedProducts from "@modules/store/templates/paginated-products"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import normalizeHandle from "@lib/util/normalize-handle"
 import { HttpTypes } from "@medusajs/types"
 import { listCategories } from "@lib/data/categories"
 import CategoriesFilter from "@modules/store/components/refinement-list/categories-filter"
@@ -51,7 +52,7 @@ export default function CategoryTemplate({
               <span key={parent.id} className="text-ui-fg-subtle">
                 <LocalizedClientLink
                   className="mr-4 hover:text-black"
-                  href={`/categories/${parent.handle}`}
+                  href={`/categories/${normalizeHandle(parent.handle || parent.name)}`}
                   data-testid="sort-by-link"
                 >
                   {parent.name}

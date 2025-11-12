@@ -15,6 +15,7 @@
   "scripts": {
     "build": "medusa build && node src/scripts/postBuild.js",
     "seed": "medusa exec ./src/scripts/seed.ts",
+    "normalize-category-handles": "medusa exec ./src/scripts/normalize-category-handles.ts",
     "ib": "init-backend",
     "start": "init-backend && cd .medusa/server && medusa start --verbose",
     "dev": "medusa develop",
@@ -45,6 +46,7 @@
     "multer": "^2.0.2",
     "pg": "^8.13.1",
     "resend": "4.0.1",
+    "slugify": "^1.6.6",
     "stripe": "^19.1.0",
     "ulid": "^2.3.0"
   },

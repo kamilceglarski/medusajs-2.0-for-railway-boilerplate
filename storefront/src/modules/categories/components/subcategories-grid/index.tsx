@@ -1,4 +1,5 @@
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import normalizeHandle from "@lib/util/normalize-handle"
 import { HttpTypes } from "@medusajs/types"
 
 type SubcategoriesGridProps = {
@@ -23,7 +24,7 @@ export default function SubcategoriesGrid({
                 {subcategories.map((subcategory) => (
                     <LocalizedClientLink
                         key={subcategory.id}
-                        href={`/categories/${subcategory.handle}`}
+                        href={`/categories/${normalizeHandle(subcategory.handle || subcategory.name)}`}
                         className="group"
                     >
                         <div className="border border-ui-border-base rounded-lg p-6 hover:shadow-lg hover:border-[#0E3E4D] transition-all duration-300 h-full">

@@ -3,6 +3,7 @@ import { getCollectionsList } from "@lib/data/collections"
 import { Text, clx } from "@medusajs/ui"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import normalizeHandle from "@lib/util/normalize-handle"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
 
 export default async function Footer() {
@@ -53,7 +54,7 @@ export default async function Footer() {
                             "hover:text-ui-fg-base",
                             children && "txt-small-plus"
                           )}
-                          href={`/categories/${c.handle}`}
+                          href={`/categories/${normalizeHandle(c.handle || c.name)}`}
                           data-testid="category-link"
                         >
                           {c.name}
@@ -65,7 +66,7 @@ export default async function Footer() {
                                 <li key={child.id}>
                                   <LocalizedClientLink
                                     className="hover:text-ui-fg-base"
-                                    href={`/categories/${child.handle}`}
+                                    href={`/categories/${normalizeHandle(child.handle || child.name)}`}
                                     data-testid="category-link"
                                   >
                                     {child.name}

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 import { listCategories } from "@lib/data/categories"
+import normalizeHandle from "@lib/util/normalize-handle"
 import { getProductsList } from "@lib/data/products"
 import { getCollectionsList } from "@lib/data/collections"
 
@@ -49,8 +50,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const cats = await listCategories()
     for (const c of cats || []) {
+      const handle = normalizeHandle(c.handle || c.name)
       urls.push({
-        url: `${base}/${country}/categories/${encodeURIComponent(c.handle)}`,
+        url: `${base}/${country}/categories/${encodeURIComponent(handle)}`,
         changeFrequency: "weekly",
         priority: 0.8,
         lastModified: new Date(c.updated_at || c.created_at || new Date())
