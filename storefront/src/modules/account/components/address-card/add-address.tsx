@@ -2,7 +2,7 @@
 
 import { Plus } from "@medusajs/icons"
 import { Button, Heading } from "@medusajs/ui"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useFormState } from "react-dom"
 
 import useToggleState from "@lib/hooks/use-toggle-state"
@@ -21,6 +21,9 @@ const AddAddress = ({ region }: { region: HttpTypes.StoreRegion }) => {
     success: false,
     error: null,
   })
+  const formRef = useRef<HTMLFormElement | null>(null)
+  const [clientPending, setClientPending] = useState(false)
+  const [clientError, setClientError] = useState<string | null>(null)
 
   const close = () => {
     setSuccessState(false)
@@ -55,7 +58,47 @@ const AddAddress = ({ region }: { region: HttpTypes.StoreRegion }) => {
         <Modal.Title>
           <Heading className="mb-2">Dodaj adres</Heading>
         </Modal.Title>
-        <form action={formAction}>
+        <form ref={formRef} onSubmit={async (e) => {
+          e.preventDefault()
+          // Client-side fallback submit: send form data to API route which performs the same action
+          if (!formRef.current) return
+          setClientError(null)
+          setClientPending(true)
+          try {
+            const fd = new FormData(formRef.current)
+            const payload: Record<string, any> = {}
+            fd.forEach((v, k) => {
+              payload[k] = v
+            })
+
+            // Client-side validation: phone is required
+            if (!payload.phone || String(payload.phone).trim() === "") {
+              setClientPending(false)
+              setClientError("Numer telefonu jest wymagany")
+              return
+            }
+
+            const resp = await fetch('/api/account/address', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
+              body: JSON.stringify(payload),
+            })
+
+            const data = await resp.json().catch(() => ({}))
+
+            if (!resp.ok) {
+              throw new Error(data?.error || `Server responded with ${resp.status}`)
+            }
+
+            // success — close modal
+            setClientPending(false)
+            setSuccessState(true)
+          } catch (err: any) {
+            setClientPending(false)
+            setClientError(err?.message || String(err))
+          }
+        }}>
           <Modal.Body>
             <div className="flex flex-col gap-y-2">
               <div className="grid grid-cols-2 gap-x-2">
@@ -125,6 +168,7 @@ const AddAddress = ({ region }: { region: HttpTypes.StoreRegion }) => {
               <Input
                 label="Phone"
                 name="phone"
+                required
                 autoComplete="phone"
                 data-testid="phone-input"
               />
@@ -135,6 +179,11 @@ const AddAddress = ({ region }: { region: HttpTypes.StoreRegion }) => {
                 data-testid="address-error"
               >
                 {formState.error}
+              </div>
+            )}
+            {clientError && (
+              <div className="text-rose-500 text-small-regular py-2" data-testid="address-client-error">
+                {clientError}
               </div>
             )}
           </Modal.Body>
@@ -149,7 +198,9 @@ const AddAddress = ({ region }: { region: HttpTypes.StoreRegion }) => {
               >
                 Cancel
               </Button>
-              <SubmitButton data-testid="save-button">Save</SubmitButton>
+              <Button size="large" type="submit" isLoading={clientPending} data-testid="save-button">
+                Save
+              </Button>
             </div>
           </Modal.Footer>
         </form>

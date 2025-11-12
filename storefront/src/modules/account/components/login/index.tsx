@@ -1,4 +1,5 @@
 import { useFormState } from "react-dom"
+import LocalizedClientLink from '@modules/common/components/localized-client-link'
 
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import Input from "@modules/common/components/input"
@@ -41,6 +42,11 @@ const Login = ({ setCurrentView }: Props) => {
             required
             data-testid="password-input"
           />
+        </div>
+        <div className="w-full flex justify-end mt-2">
+          <LocalizedClientLink href="/reset-password" className="text-ui-fg-interactive underline text-sm" data-testid="forgot-password-link">
+            Zapomniałeś hasła?
+          </LocalizedClientLink>
         </div>
         <ErrorMessage error={message} data-testid="login-error-message" />
         <SubmitButton data-testid="sign-in-button" className="w-full mt-6">

@@ -90,7 +90,7 @@ const ServicesClient = () => {
         {
             icon: <CreditCard className="w-6 h-6" />,
             title: "Darmowa dostawa",
-            description: "Od 100 zł"
+            description: "Od 200 zł"
         },
         {
             icon: <StarSolid className="w-6 h-6" />,

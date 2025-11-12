@@ -33,6 +33,44 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     useImperativeHandle(ref, () => inputRef.current!)
 
+    // Stop propagation of focus/input events in capture phase to reduce
+    // the likelihood of third-party content scripts (e.g. Grammarly)
+    // receiving the event and throwing. We still call any provided
+    // handlers after stopping propagation.
+    const handleFocusCapture = (e: React.FocusEvent<HTMLInputElement>) => {
+      try {
+        e.stopPropagation()
+        const ne = e.nativeEvent as Event
+        if (ne && typeof (ne as any).stopImmediatePropagation === "function") {
+          ; (ne as any).stopImmediatePropagation()
+        }
+      } catch (_) {
+        // ignore
+      }
+
+      if (props.onFocusCapture) {
+        try {
+          props.onFocusCapture(e)
+        } catch (_) { }
+      }
+    }
+
+    const handleInputCapture = (e: React.FormEvent<HTMLInputElement>) => {
+      try {
+        e.stopPropagation()
+        const ne = e.nativeEvent as Event
+        if (ne && typeof (ne as any).stopImmediatePropagation === "function") {
+          ; (ne as any).stopImmediatePropagation()
+        }
+      } catch (_) { }
+
+      if (props.onInputCapture) {
+        try {
+          props.onInputCapture(e)
+        } catch (_) { }
+      }
+    }
+
     return (
       <div className="flex flex-col w-full">
         {topLabel && (
@@ -46,7 +84,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             required={required}
             className="pt-4 pb-1 block w-full h-11 px-4 mt-0 bg-ui-bg-field border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active border-ui-border-base hover:bg-ui-bg-field-hover"
             {...props}
+            // Disable browser-native spellcheck by default and opt-out attributes
+            spellCheck={props.spellCheck ?? false}
+            // Many grammar/spellcheck extensions (Grammarly, LanguageTool) respect these data attributes
+            data-gramm="false"
+            data-gramm_editor="false"
+            data-enable-grammarly="false"
+            // Prevent auto-correct on mobile which can trigger extension input events
+            autoCorrect={props.autoCorrect ?? "off"}
             ref={inputRef}
+            onFocusCapture={handleFocusCapture}
+            onInputCapture={handleInputCapture}
           />
           <label
             htmlFor={name}

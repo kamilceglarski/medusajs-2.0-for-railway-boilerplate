@@ -55,7 +55,6 @@ export default function CustomerServicePage() {
                                 <li>Przelewy online (Przelewy24, PayU)</li>
                                 <li>BLIK</li>
                                 <li>Karty płatnicze (Visa, Mastercard)</li>
-                                <li>Przelew tradycyjny</li>
                                 <li>Płatność przy odbiorze (za pobraniem) – +10 zł</li>
                             </ul>
                         </div>
@@ -80,7 +79,7 @@ export default function CustomerServicePage() {
 
                             <div>
                                 <h3 className="font-semibold text-lg mb-2" style={{ color: "#0E3E4D" }}>Jak zgłosić zwrot/reklamację?</h3>
-                                <p>Napisz do nas na <a href="mailto:kontakt@lumoria-studio.pl" className="text-ui-fg-interactive underline">kontakt@lumoria-studio.pl</a> lub zadzwoń pod numer <a href="tel:+48575994767" className="text-ui-fg-interactive underline">+48 575 994 767</a>.</p>
+                                <p>Prosimy o zgłoszenie zwrotu lub reklamacji za pomocą naszego <a href="/contact" className="text-ui-fg-interactive underline">formularza kontaktowego</a>. To najprostszy sposób — prosimy opisać problem i dołączyć zdjęcia. Jeśli wolisz, możesz również wysłać e-mail na <a href="mailto:kontakt@lumoria-studio.pl" className="text-ui-fg-interactive underline">kontakt@lumoria-studio.pl</a> lub zadzwonić pod numer <a href="tel:+48575994767" className="text-ui-fg-interactive underline">+48 575 994 767</a>.</p>
                             </div>
                         </div>
                     </section>
@@ -131,15 +130,7 @@ export default function CustomerServicePage() {
                                 </p>
                             </details>
 
-                            <details className="group">
-                                <summary className="font-semibold cursor-pointer list-none flex items-center gap-2" style={{ color: "#0E3E4D" }}>
-                                    <span className="group-open:rotate-90 transition-transform">▶</span>
-                                    Czy produkty można myć?
-                                </summary>
-                                <p className="mt-2 ml-6 text-ui-fg-subtle">
-                                    Produkty drewniane zalecamy czyścić suchą lub lekko wilgotną szmatką. Nie należy ich moczyć ani myć w zmywarce. Produkty z pleksi można czyścić wilgotną szmatką.
-                                </p>
-                            </details>
+                            {/* Removed 'Czy produkty można myć?' per content update request */}
                         </div>
                     </section>
 
@@ -151,20 +142,13 @@ export default function CustomerServicePage() {
                         <p className="text-base text-ui-fg-subtle mb-4">
                             Jeśli nie znalazłeś odpowiedzi na swoje pytanie, skontaktuj się z nami – chętnie pomożemy!
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="flex">
                             <a
-                                href="mailto:kontakt@lumoria-studio.pl"
+                                href="/contact"
                                 className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md text-white font-semibold transition-colors hover:opacity-90"
                                 style={{ backgroundColor: "#0E3E4D" }}
                             >
-                                📧 Napisz do nas
-                            </a>
-                            <a
-                                href="tel:+48575994767"
-                                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md font-semibold transition-colors border-2 hover:bg-[#B57641] hover:text-white"
-                                style={{ borderColor: "#B57641", color: "#B57641" }}
-                            >
-                                📞 Zadzwoń
+                                ✉️ Przejdź do formularza kontaktowego
                             </a>
                         </div>
                     </section>

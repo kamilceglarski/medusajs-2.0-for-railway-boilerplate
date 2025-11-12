@@ -144,7 +144,7 @@ const Hero = () => {
               {/* Description */}
               <p className={`text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl leading-relaxed text-center sm:text-left transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ color: '#0E3E4D' }}>
                 Tworzymy <strong style={{ color: '#B57641' }}>wyjątkowe dekoracje</strong> i <strong style={{ color: '#B57641' }}>precyzyjne grawery</strong> ze sklejki.
-                Personalizowane tabliczki, dekoracje ślubne, prezenty i gadżety firmowe — wszystko na najwyższym poziomie.
+                Personalizowane tabliczki, dekoracje ślubne, prezenty i gadżety firmowe — wszystko na najwyższym poziomie. Precyzyjny grawer na wielu powierzchniach.
               </p>
 
               {/* CTA Buttons */}
@@ -175,7 +175,7 @@ const Hero = () => {
                   </div>
                   <div className="min-w-0">
                     <div className="font-semibold text-sm sm:text-base" style={{ color: '#0E3E4D' }}>Precyzyjny grawer</div>
-                    <div className="text-xs sm:text-sm" style={{ color: '#0E3E4D' }}>Laser CO2</div>
+                    <div className="text-xs sm:text-sm" style={{ color: '#0E3E4D' }}>Na każdym materiale</div>
                   </div>
                 </div>
 
@@ -185,7 +185,7 @@ const Hero = () => {
                   </div>
                   <div className="min-w-0">
                     <div className="font-semibold text-sm sm:text-base" style={{ color: '#0E3E4D' }}>Darmowa dostawa</div>
-                    <div className="text-xs sm:text-sm" style={{ color: '#0E3E4D' }}>Od 100 zł</div>
+                    <div className="text-xs sm:text-sm" style={{ color: '#0E3E4D' }}>Od 200 zł</div>
                   </div>
                 </div>
               </div>

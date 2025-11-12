@@ -10,11 +10,11 @@ type ServiceItem = {
 
 const services: ServiceItem[] = [
   {
-    title: "Grawerowanie",
+    title: "Personalizowane przedmioty",
     description:
       "Precyzyjne grawerowanie na metalach, drewnie i tworzywach. Idealne do personalizacji i oznaczeń.",
     imageSrc: "/images/UslugiGrawerowanie.webp",
-    imageAlt: "Grawerowanie laserowe — usługi grawerskie i personalizacja",
+    imageAlt: "Personalizowane przedmioty — usługi grawerskie i personalizacja",
   },
   {
     title: "Tabliczki znamionowe",

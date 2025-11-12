@@ -6,24 +6,20 @@ import { ChevronDown } from "@medusajs/icons"
 
 const faqData = [
     {
-        question: "Jak długo trwa realizacja zamówienia?",
-        answer: "Standardowa realizacja to 2-3 dni robocze. W przypadku pilnych zamówień oferujemy ekspresową realizację w 24 godziny za dodatkową opłatą. Czas może się wydłużyć w okresach świątecznych."
-    },
-    {
         question: "Jakie materiały oferujecie do grawerowania?",
-        answer: "Grawerujemy na sklejce brzozowej, dębowej, bukowej oraz na drewnie MDF. Wszystkie materiały są najwyższej jakości i pochodzą z certyfikowanych źródeł. Na życzenie możemy użyć innych gatunków drewna."
+        answer: "Właściwie na każdym materiale możemy grawerować. Najpopularniejsze materiały to sklejka, akryl, skóra, szkło, metal, aluminium."
     },
     {
         question: "Jakie są ceny za grawerowanie?",
-        answer: "Ceny zależą od rozmiaru, złożoności projektu i ilości sztuk. Tabliczki grawerowane zaczynają się od 15 zł, dekoracje ślubne od 25 zł. Przy większych zamówieniach oferujemy atrakcyjne rabaty. Wyślij nam projekt, a wycenimy go bezpłatnie."
+        answer: "Ceny zależą od rozmiaru, złożoności projektu i ilości sztuk. Przy większych zamówieniach oferujemy atrakcyjne rabaty. Wyślij nam projekt, a wycenimy go bezpłatnie."
     },
     {
         question: "W jakich formatach mogę przesłać projekt?",
-        answer: "Przyjmujemy pliki w formatach: AI, EPS, PDF, DXF, DWG, PNG, JPG. Najlepszą jakość zapewniają formaty wektorowe (AI, EPS, PDF). Minimalna rozdzielczość dla plików rastrowych to 300 DPI."
+        answer: "Przyjmujemy projekty w każdym formacie; ważne, aby zdjęcia miały dobrą rozdzielczość. W przypadku plików wektorowych (AI, EPS, PDF) zapewniamy najlepszą jakość."
     },
     {
         question: "Czy oferujecie darmową dostawę?",
-        answer: "Tak! Darmowa dostawa przy zamówieniach powyżej 100 zł na terenie całej Polski. Dla zamówień poniżej tej kwoty koszt dostawy to 15 zł. Oferujemy również odbiór osobisty w naszym studio w Rybniku."
+        answer: "Tak, od zamówień powyżej 200 zł oferujemy darmową dostawę."
     }
 ]
 

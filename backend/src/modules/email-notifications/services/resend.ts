@@ -3,6 +3,7 @@ import { AbstractNotificationProviderService, MedusaError } from '@medusajs/fram
 import { Resend, CreateEmailOptions } from 'resend'
 import { ReactNode } from 'react'
 import { generateEmailTemplate } from '../templates'
+import { renderToStaticMarkup } from 'react-dom/server'
 
 type InjectedDependencies = {
   logger: Logger
@@ -83,18 +84,49 @@ export class ResendNotificationService extends AbstractNotificationProviderServi
       text: emailOptions.text,
       attachments: Array.isArray(notification.attachments)
         ? notification.attachments.map((attachment) => ({
-            content: attachment.content,
-            filename: attachment.filename,
-            content_type: attachment.content_type,
-            disposition: attachment.disposition ?? 'attachment',
-            id: attachment.id ?? undefined
-          }))
+          content: attachment.content,
+          filename: attachment.filename,
+          content_type: attachment.content_type,
+          disposition: attachment.disposition ?? 'attachment',
+          id: attachment.id ?? undefined
+        }))
         : undefined,
       scheduledAt: emailOptions.scheduledAt
     }
 
     // Send the email via Resend
     try {
+      // Log recipient and content for debugging (recipient(s), subject, text and HTML preview)
+      try {
+        const toList = Array.isArray(message.to) ? message.to.join(', ') : message.to
+        const subject = message.subject ?? '(no-subject)'
+        let htmlPreview = ''
+        try {
+          htmlPreview = renderToStaticMarkup(emailContent as any)
+        } catch (renderErr) {
+          htmlPreview = `could not render HTML preview: ${renderErr}`
+        }
+
+        this.logger_.log(`Sending email template "${notification.template}" to: ${toList}`)
+        console.log(`Sending email template "${notification.template}" to: ${toList}`)
+        this.logger_.log(`Subject: ${subject}`)
+        console.log(`Subject: ${subject}`)
+        if (message.text) {
+          this.logger_.log(`Text: ${message.text}`)
+          console.log(`Text: ${message.text}`)
+        }
+        this.logger_.log(`HTML preview: ${htmlPreview.substring(0, 1000)}`)
+        console.log(`HTML preview: ${htmlPreview.substring(0, 1000)}`)
+        if (message.attachments && message.attachments.length) {
+          const names = message.attachments.map((a) => a.filename).join(', ')
+          this.logger_.log(`Attachments: ${names}`)
+          console.log(`Attachments: ${names}`)
+        }
+      } catch (logErr) {
+        // Don't fail sending if logging fails
+        this.logger_.error(`Failed to log email preview: ${logErr}`)
+        console.error(`Failed to log email preview: ${logErr}`)
+      }
       await this.resend.emails.send(message)
       this.logger_.log(
         `Successfully sent "${notification.template}" email to ${notification.to} via Resend`

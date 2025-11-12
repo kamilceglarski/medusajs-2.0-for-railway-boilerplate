@@ -53,6 +53,24 @@ const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
             ref={innerRef}
             defaultValue={defaultValue}
             {...props}
+            onFocusCapture={(e) => {
+              try {
+                e.stopPropagation()
+                const ne = e.nativeEvent as Event
+                if (ne && typeof (ne as any).stopImmediatePropagation === "function") {
+                  ; (ne as any).stopImmediatePropagation()
+                }
+              } catch (_) { }
+            }}
+            onInputCapture={(e) => {
+              try {
+                e.stopPropagation()
+                const ne = e.nativeEvent as Event
+                if (ne && typeof (ne as any).stopImmediatePropagation === "function") {
+                  ; (ne as any).stopImmediatePropagation()
+                }
+              } catch (_) { }
+            }}
             className="appearance-none flex-1 bg-transparent border-none px-4 py-2.5 transition-colors duration-150 outline-none "
           >
             <option disabled value="">
