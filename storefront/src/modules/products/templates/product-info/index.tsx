@@ -32,6 +32,14 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
         >
           {product.description}
         </Text>
+
+        <div className="mt-2">
+          <LocalizedClientLink href="/personalizacja" className="text-sm text-ui-fg-interactive hover:underline">
+            Informacje dotyczące personalizowanego graweru i wyboru czcionki znajdziesz tutaj
+          </LocalizedClientLink>
+        </div>
+
+        {/* Personalization instructions moved to a dedicated page: /personalizacja */}
       </div>
     </div>
   )
