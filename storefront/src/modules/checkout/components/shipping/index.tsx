@@ -48,7 +48,7 @@ const Shipping: React.FC<ShippingProps> = ({
   const isInpostSelected = !!selectedShippingMethod && (
     ((selectedShippingMethod as any).data?.inpost === true) ||
     ((selectedShippingMethod as any).provider_id === 'inpost') ||
-    selectedShippingMethod.name?.toLowerCase().includes('inpost')
+    selectedShippingMethod.name?.toLowerCase().includes('inpost paczkomat')
   )
 
   const handleEdit = () => {
@@ -68,6 +68,17 @@ const Shipping: React.FC<ShippingProps> = ({
       .finally(() => {
         setIsLoading(false)
       })
+  }
+
+  const formatInpostPoint = (point: any) => {
+    if (!point) return ""
+    const name = point.name || ""
+    const addr = point.address?.line1 || ""
+    const addr2 = point.address?.line2 ? `, ${point.address.line2}` : ""
+    const lat = point.location?.latitude
+    const lon = point.location?.longitude
+    const coords = lat && lon ? ` (${lat},${lon})` : ""
+    return `${name} — ${addr}${addr2}${coords}`
   }
 
   useEffect(() => {
@@ -151,7 +162,7 @@ const Shipping: React.FC<ShippingProps> = ({
                   ref={inpostInputRef}
                   type="hidden"
                   name="inpost_point"
-                  value={selectedInpostPoint ? JSON.stringify(selectedInpostPoint) : ""}
+                  value={selectedInpostPoint ? formatInpostPoint(selectedInpostPoint) : ""}
                   readOnly
                 />
                 <InPostSelector
@@ -159,7 +170,7 @@ const Shipping: React.FC<ShippingProps> = ({
                   onSelect={(point) => {
                     setSelectedInpostPoint(point)
                     if (inpostInputRef.current) {
-                      inpostInputRef.current.value = JSON.stringify(point)
+                      inpostInputRef.current.value = formatInpostPoint(point)
                     }
                     // opóźnij minimalnie, aby stan zaktualizował się przed submit
                     setTimeout(() => inpostFormRef.current?.requestSubmit(), 0)

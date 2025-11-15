@@ -346,17 +346,18 @@ export async function setInpostPoint(currentState: unknown, formData: FormData) 
     if (!formData) throw new Error("No form data found when setting InPost point")
     const cart = await retrieveCart()
     if (!cart?.id) throw new Error("No existing cart found when setting InPost point")
+    // Save the inpost point as a plain text string so it's easy to read in the admin UI
+    const raw = (formData.get("inpost_point") as string) || ""
 
-    const json = (formData.get("inpost_point") as string) || ""
-    let point: any = null
-    try {
-      point = json ? JSON.parse(json) : null
-    } catch {
-      point = null
+    let existingMeta = (cart as any).metadata || {}
+    // Remove dpd_point if present — user requested it removed from metadata
+    if ((existingMeta as any).dpd_point) {
+      const copy = { ...existingMeta }
+      delete (copy as any).dpd_point
+      existingMeta = copy
     }
 
-    const existingMeta = (cart as any).metadata || {}
-    await updateCart({ metadata: { ...existingMeta, inpost_point: point } as any })
+    await updateCart({ metadata: { ...existingMeta, inpost_point: raw } as any })
     revalidateTag("cart")
   } catch (e: any) {
     return e.message

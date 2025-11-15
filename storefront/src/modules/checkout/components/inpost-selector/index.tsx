@@ -85,7 +85,7 @@ const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint
         })
         window.easyPack.mapWidget('easypack-map', function(point: any) {
           // Callback gdy użytkownik wybierze paczkomat
-          onSelect({
+            onSelect({
             name: point.name,
             address: {
               line1: point.address.line1,
@@ -96,6 +96,33 @@ const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint
               longitude: point.location.longitude,
             },
           })
+            // Po wyborze spróbuj zamknąć popup widgetu, jeśli to możliwe
+            try {
+              // Jeśli widget udostępnia metodę zamknięcia
+              if (window.easyPack && typeof window.easyPack.closePopup === 'function') {
+                window.easyPack.closePopup()
+                return
+              }
+
+              // Kliknij przyciski zamykające w popularnych implementacjach (Leaflet, easypack)
+              const closeBtns = Array.from(document.querySelectorAll('.leaflet-popup-close-button, .easypack-popup__close, .easypack-popup__close-btn, button[aria-label="Close"]')) as HTMLElement[]
+              if (closeBtns.length) {
+                closeBtns.forEach(btn => btn.click())
+                return
+              }
+
+              // Usuń widoczne popupy należące do widgetu (ostrożnie)
+              const possiblePopups = Array.from(document.querySelectorAll('[class*=\"easypack\"], .leaflet-popup')) as HTMLElement[]
+              for (const p of possiblePopups) {
+                // tylko jeśli popup zawiera przycisk z tekstem 'Wybierz' lub 'Szczegóły'
+                if (p.innerText && /Wybierz|Szczegóły|Szczegoly/i.test(p.innerText)) {
+                  p.remove()
+                }
+              }
+            } catch (e) {
+              // Nie blokujemy działania na błędach czyszczących DOM
+              console.warn('Failed to close InPost popup automatically', e)
+            }
         })
       } catch (e) {
         console.error('Failed to init InPost widget:', e)
