@@ -55,6 +55,14 @@ const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint
     script.onload = () => {
       console.log('InPost Geowidget loaded')
       setIsLoaded(true)
+      try {
+        // If openInPostMap already prepared an async init callback, call it now
+        if (window.easyPack && typeof window.easyPackAsyncInit === 'function') {
+          window.easyPackAsyncInit()
+        }
+      } catch (e) {
+        console.warn('Error calling easyPackAsyncInit after script load', e)
+      }
     }
     script.onerror = () => {
       console.error('Failed to load InPost Geowidget')
@@ -68,21 +76,24 @@ const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint
 
   const openInPostMap = () => {
     // Jeśli skrypt jeszcze się nie załadował, nie rób nic
-    if (!window.easyPack) {
-      console.warn('InPost widget not loaded yet')
-    }
-
-    // Zawsze definiujemy init, a jeśli easyPack jest dostępny – odpalamy od razu
+    // Zawsze definiujemy init. Jeśli easyPack jest dostępny – odpalamy od razu.
+    // Jeśli nie jest, uruchamiamy krótki polling, aby poczekać na definicję globalnej zmiennej.
     window.easyPackAsyncInit = function () {
       try {
-        window.easyPack.init({
-          instance: 'pl',
-          defaultLocale: 'pl',
-          mapType: 'osm',
-          searchType: 'osm',
-          points: { types: ['parcel_locker'] },
-          map: { initialTypes: ['parcel_locker'] },
-        })
+        // Initialize the library once, but always attach a new widget to the container
+        if (!(window as any).__easyPackLibraryInitialized) {
+          window.easyPack.init({
+            instance: 'pl',
+            defaultLocale: 'pl',
+            mapType: 'osm',
+            searchType: 'osm',
+            points: { types: ['parcel_locker'] },
+            map: { initialTypes: ['parcel_locker'] },
+          })
+          ;(window as any).__easyPackLibraryInitialized = true
+        }
+
+        // Always (re)attach the map widget to the container so remounts / re-opens work
         window.easyPack.mapWidget('easypack-map', function(point: any) {
           // Callback gdy użytkownik wybierze paczkomat
             onSelect({
@@ -129,8 +140,30 @@ const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint
       }
     }
 
-    if (window.easyPack) {
-      window.easyPackAsyncInit()
+    const tryInit = () => {
+      if ((window as any).easyPack) {
+        try {
+          if (typeof (window as any).easyPackAsyncInit === 'function') {
+            ;(window as any).easyPackAsyncInit()
+          }
+        } catch (e) {
+          console.warn('easyPack init failed on tryInit', e)
+        }
+        return true
+      }
+      return false
+    }
+
+    if (!tryInit()) {
+      let attempts = 0
+      const max = 30
+      const interval = setInterval(() => {
+        attempts++
+        if (tryInit() || attempts >= max) {
+          clearInterval(interval)
+          if (attempts >= max) console.warn('easyPack not available after waiting')
+        }
+      }, 200)
     }
   }
 

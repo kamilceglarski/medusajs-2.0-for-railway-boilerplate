@@ -72,6 +72,8 @@ const Shipping: React.FC<ShippingProps> = ({
 
   const formatInpostPoint = (point: any) => {
     if (!point) return ""
+    // If it's already a formatted string (saved metadata), return it directly
+    if (typeof point === "string") return point
     const name = point.name || ""
     const addr = point.address?.line1 || ""
     const addr2 = point.address?.line2 ? `, ${point.address.line2}` : ""
@@ -175,7 +177,7 @@ const Shipping: React.FC<ShippingProps> = ({
                     // opóźnij minimalnie, aby stan zaktualizował się przed submit
                     setTimeout(() => inpostFormRef.current?.requestSubmit(), 0)
                   }}
-                  selectedPoint={selectedInpostPoint}
+                  selectedPoint={typeof selectedInpostPoint === 'object' ? selectedInpostPoint : null}
                 />
               </form>
               {inpostMessage && (
