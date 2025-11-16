@@ -58,7 +58,11 @@ const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint
       try {
         // If openInPostMap already prepared an async init callback, call it now
         if (window.easyPack && typeof window.easyPackAsyncInit === 'function') {
-          window.easyPackAsyncInit()
+          try {
+            window.easyPackAsyncInit()
+          } catch (e) {
+            console.warn('easyPackAsyncInit threw on script.onload', e)
+          }
         }
       } catch (e) {
         console.warn('Error calling easyPackAsyncInit after script load', e)
@@ -93,8 +97,22 @@ const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint
           ;(window as any).__easyPackLibraryInitialized = true
         }
 
+        // Ensure container exists and is clean before attaching widget
+        const container = document.getElementById('easypack-map')
+        if (!container) {
+          console.warn('easypack-map container not found')
+          return
+        }
+        // Remove leftover children from previous initializations
+        try {
+          while (container.firstChild) container.removeChild(container.firstChild)
+        } catch (e) {
+          console.warn('Failed to clear easypack-map container', e)
+        }
+
         // Always (re)attach the map widget to the container so remounts / re-opens work
-        window.easyPack.mapWidget('easypack-map', function(point: any) {
+        if (window.easyPack && typeof window.easyPack.mapWidget === 'function') {
+          window.easyPack.mapWidget('easypack-map', function(point: any) {
           // Callback gdy użytkownik wybierze paczkomat
             onSelect({
             name: point.name,
@@ -135,6 +153,9 @@ const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint
               console.warn('Failed to close InPost popup automatically', e)
             }
         })
+        } else {
+          console.warn('easyPack.mapWidget is not available')
+        }
       } catch (e) {
         console.error('Failed to init InPost widget:', e)
       }
@@ -156,14 +177,14 @@ const InPostSelector: React.FC<InPostSelectorProps> = ({ onSelect, selectedPoint
 
     if (!tryInit()) {
       let attempts = 0
-      const max = 30
+      const max = 60
       const interval = setInterval(() => {
         attempts++
         if (tryInit() || attempts >= max) {
           clearInterval(interval)
           if (attempts >= max) console.warn('easyPack not available after waiting')
         }
-      }, 200)
+      }, 300)
     }
   }
 

@@ -54,15 +54,30 @@ export async function GET(
       }
     )
 
+    // Read and log the response body (safe: read as text then try parse JSON)
     let paymentCollectionId
-
+    let paymentCollectionText = null
+    try {
+      paymentCollectionText = await paymentCollectionResponse.text()
+    } catch (e) {
+      console.warn('Failed to read paymentCollectionResponse body as text', e)
+    }
+    console.log('Payment collection response status:', paymentCollectionResponse.status, 'body:', paymentCollectionText)
     if (paymentCollectionResponse.ok) {
-      const paymentData = await paymentCollectionResponse.json()
-      paymentCollectionId = paymentData.payment_collection?.id
-      console.log("Payment collection created:", paymentCollectionId)
+      try {
+        const paymentData = paymentCollectionText ? JSON.parse(paymentCollectionText) : null
+        paymentCollectionId = paymentData?.payment_collection?.id
+        console.log('Payment collection created:', paymentCollectionId)
+      } catch (e) {
+        console.warn('Failed to parse payment collection response JSON', e)
+      }
     } else {
-      const errorData = await paymentCollectionResponse.json().catch(() => ({}))
-      console.log("Payment collection response:", errorData)
+      try {
+        const errorData = paymentCollectionText ? JSON.parse(paymentCollectionText) : paymentCollectionText
+        console.log('Payment collection response (error):', errorData)
+      } catch (e) {
+        console.log('Payment collection response (raw):', paymentCollectionText)
+      }
       // Może już istnieć - kontynuuj
     }
 
@@ -84,37 +99,66 @@ export async function GET(
         }
       )
 
+      // Read and log payment session response
+      let paymentSessionText = null
+      try {
+        paymentSessionText = await paymentSessionResponse.text()
+      } catch (e) {
+        console.warn('Failed to read paymentSessionResponse body as text', e)
+      }
+      console.log('Payment session response status:', paymentSessionResponse.status, 'body:', paymentSessionText)
+
       if (paymentSessionResponse.ok) {
-        const sessionData = await paymentSessionResponse.json()
-        console.log("Payment session created:", sessionData.payment_session?.id)
+        try {
+          const sessionData = paymentSessionText ? JSON.parse(paymentSessionText) : null
+          console.log('Payment session created:', sessionData?.payment_session?.id)
 
-        const paymentSessionId = sessionData.payment_session?.id
+          const paymentSessionId = sessionData?.payment_session?.id
 
-        // Oznacz payment session jako authorized (płatność zakończona w Stripe)
-        if (paymentSessionId) {
-          console.log("Authorizing payment session...")
+          // Oznacz payment session jako authorized (płatność zakończona w Stripe)
+          if (paymentSessionId) {
+            console.log('Authorizing payment session...')
 
-          const authorizeResponse = await fetch(
-            `${backendUrl}/store/payment-collections/${paymentCollectionId}/payment-sessions/${paymentSessionId}/authorize`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "x-publishable-api-key": publishableKey,
-              },
+            const authorizeResponse = await fetch(
+              `${backendUrl}/store/payment-collections/${paymentCollectionId}/payment-sessions/${paymentSessionId}/authorize`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-publishable-api-key': publishableKey,
+                },
+              }
+            )
+
+            let authorizeText = null
+            try {
+              authorizeText = await authorizeResponse.text()
+            } catch (e) {
+              console.warn('Failed to read authorizeResponse body as text', e)
             }
-          )
+            console.log('Authorize payment session response status:', authorizeResponse.status, 'body:', authorizeText)
 
-          if (authorizeResponse.ok) {
-            console.log("Payment session authorized successfully!")
-          } else {
-            const authError = await authorizeResponse.json().catch(() => ({}))
-            console.error("Failed to authorize payment session:", authError)
+            if (authorizeResponse.ok) {
+              console.log('Payment session authorized successfully!')
+            } else {
+              try {
+                const authErr = authorizeText ? JSON.parse(authorizeText) : authorizeText
+                console.error('Failed to authorize payment session (parsed):', authErr)
+              } catch (e) {
+                console.error('Failed to authorize payment session (raw):', authorizeText)
+              }
+            }
           }
+        } catch (e) {
+          console.warn('Failed to parse payment session JSON', e)
         }
       } else {
-        const sessionError = await paymentSessionResponse.json().catch(() => ({}))
-        console.error("Failed to create payment session:", sessionError)
+        try {
+          const sessionErr = paymentSessionText ? JSON.parse(paymentSessionText) : paymentSessionText
+          console.error('Failed to create payment session (parsed):', sessionErr)
+        } catch (e) {
+          console.error('Failed to create payment session (raw):', paymentSessionText)
+        }
       }
     }
 
@@ -133,14 +177,33 @@ export async function GET(
 
     console.log("Complete cart response status:", completeResponse.status)
 
+    // Read and log completeResponse body safely
+    let completeText = null
+    try {
+      completeText = await completeResponse.text()
+    } catch (e) {
+      console.warn('Failed to read completeResponse body as text', e)
+    }
+    console.log('Complete cart response body:', completeText)
+
     if (!completeResponse.ok) {
-      const errorData = await completeResponse.json().catch(() => ({}))
-      console.error("Complete cart error response:", errorData)
-      throw new Error(errorData.message || "Failed to complete cart")
+      try {
+        const errorData = completeText ? JSON.parse(completeText) : completeText
+        console.error('Complete cart error response (parsed):', errorData)
+        throw new Error(errorData?.message || 'Failed to complete cart')
+      } catch (e) {
+        console.error('Complete cart error response (raw):', completeText)
+        throw new Error('Failed to complete cart')
+      }
     }
 
-    const responseData = await completeResponse.json()
-    console.log("Complete cart response:", responseData)
+    let responseData = null
+    try {
+      responseData = completeText ? JSON.parse(completeText) : null
+    } catch (e) {
+      console.warn('Failed to parse complete cart response JSON', e)
+    }
+    console.log('Complete cart response (parsed):', responseData)
 
     const order = responseData.order
 
