@@ -130,7 +130,7 @@ const Payment = ({ cart }: { cart: any }) => {
                     <div className="w-2.5 h-2.5 rounded-full bg-ui-fg-interactive"></div>
                   </div>
                   <span className="text-base-regular">
-                    Credit/Debit Card, BLIK, P24
+                    Karta kredytowa/debetowa, BLIK
                   </span>
                 </div>
                 <span className="justify-self-end text-ui-fg-subtle text-small-regular">
@@ -153,7 +153,7 @@ const Payment = ({ cart }: { cart: any }) => {
             disabled={!cart?.items || cart.items.length === 0}
             data-testid="submit-payment-button"
           >
-            Continue to Stripe
+            Przejdź do Stripe
           </Button>
         </div>
       ) : (
@@ -162,10 +162,10 @@ const Payment = ({ cart }: { cart: any }) => {
             {paymentCompleted && (
               <div className="flex flex-col w-1/3">
                 <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                  Method
+                  Metoda
                 </Text>
                 <Text className="txt-medium text-ui-fg-subtle">
-                  Stripe Payment
+                  Płatność — Stripe
                 </Text>
               </div>
             )}

@@ -1,1 +1,21 @@
 .idea/
+
+# PM2 logs and runtime log files
+# ignore any .pm2 logs anywhere in the repo
+**/.pm2/*.log
+**/.pm2/*
+
+# specific folders created earlier by PM2 runs
+backend/backend/.pm2/
+storefront/storefront/.pm2/
+
+# Ignore local env files (do NOT commit secrets)
+.env
+.env.*
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+
+# node modules
+node_modules/

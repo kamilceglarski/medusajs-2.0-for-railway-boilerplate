@@ -72,17 +72,50 @@ export async function POST(
       ? `${process.env.STOREFRONT_URL}/pl/checkout?step=payment`
       : `http://localhost:8000/pl/checkout?step=payment`
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card", "blik", "p24"],
-      line_items,
-      mode: "payment",
-      success_url: successUrl,
-      cancel_url: cancelUrl,
-      metadata: {
-        cart_id: cart.id,
-      },
-      customer_email: cart.email,
-    })
+    // Determine payment methods to request. Can be overridden via env:
+    // STRIPE_PAYMENT_METHODS="card,blik,p24"
+    const configuredMethods = process.env.STRIPE_PAYMENT_METHODS
+      ? process.env.STRIPE_PAYMENT_METHODS.split(",").map((s) => s.trim())
+      : ["card", "blik"]
+
+    let session
+    try {
+      session = await stripe.checkout.sessions.create({
+        payment_method_types: configuredMethods,
+        line_items,
+        mode: "payment",
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+        metadata: {
+          cart_id: cart.id,
+        },
+        customer_email: cart.email,
+      })
+    } catch (err: any) {
+      // If Stripe rejects the provided payment method types (e.g. p24 not enabled),
+      // fall back to a safe default and retry with ['card'] to avoid failing the checkout.
+      console.warn("Stripe session create failed with methods:", configuredMethods, "error:", err?.message)
+
+      // Retry with card only as a safe fallback
+      try {
+        session = await stripe.checkout.sessions.create({
+          payment_method_types: ["card"],
+          line_items,
+          mode: "payment",
+          success_url: successUrl,
+          cancel_url: cancelUrl,
+          metadata: {
+            cart_id: cart.id,
+          },
+          customer_email: cart.email,
+        })
+        console.info("Stripe session created with fallback payment method: card")
+      } catch (err2: any) {
+        // if retry fails, rethrow so outer catch handles it
+        console.error("Stripe session retry with 'card' failed:", err2)
+        throw err2
+      }
+    }
 
     res.json({ url: session.url })
   } catch (error) {
