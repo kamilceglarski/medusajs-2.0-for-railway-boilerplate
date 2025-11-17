@@ -74,13 +74,16 @@ export async function POST(
 
     // Determine payment methods to request. Can be overridden via env:
     // STRIPE_PAYMENT_METHODS="card,blik,p24"
-    const configuredMethods = process.env.STRIPE_PAYMENT_METHODS
-      ? process.env.STRIPE_PAYMENT_METHODS.split(",").map((s) => s.trim())
-      : ["card", "blik"]
+    const configuredMethods = (
+      process.env.STRIPE_PAYMENT_METHODS
+        ? process.env.STRIPE_PAYMENT_METHODS.split(",").map((s) => s.trim())
+        : ["card", "blik"]
+    ) as Stripe.Checkout.SessionCreateParams.PaymentMethodType[]
 
     let session
     try {
       session = await stripe.checkout.sessions.create({
+        // configuredMethods is asserted above to match Stripe's expected literal union
         payment_method_types: configuredMethods,
         line_items,
         mode: "payment",
