@@ -6,13 +6,14 @@ type ServiceItem = {
   description: string
   imageSrc: string
   imageAlt: string
+  extra?: string
 }
 
 const services: ServiceItem[] = [
   {
-    title: "Personalizowane przedmioty",
+    title: "Znakowanie",
     description:
-      "Precyzyjne grawerowanie na metalach, drewnie i tworzywach. Idealne do personalizacji i oznaczeń.",
+      "Oferujemy precyzyjne znakowanie laserowe na różnych materiałach, zapewniając trwałość i estetykę.",
     imageSrc: "/images/UslugiGrawerowanie.webp",
     imageAlt: "Personalizowane przedmioty — usługi grawerskie i personalizacja",
   },
@@ -66,6 +67,9 @@ const Services = () => {
                   <Text className="mt-2 text-sm text-gray-600">
                     {service.description}
                   </Text>
+                  {service.extra && (
+                    <div className="mt-2 text-sm text-gray-500">{service.extra}</div>
+                  )}
                 </div>
               </LocalizedClientLink>
             ))}

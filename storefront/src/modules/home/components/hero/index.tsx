@@ -159,7 +159,7 @@ const Hero = () => {
 
               {/* Features grid */}
               <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 justify-items-center sm:justify-items-start transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} role="list" aria-label="Zalety usług Lumoria Studio">
-                <div className="flex items-center space-x-3 bg-white/80 backdrop-blur-sm rounded-lg p-3 sm:p-4 border" style={{ borderColor: '#0E3E4D30' }} role="listitem">
+                <div className="flex items-center space-x-3 bg-white/80 backdrop-blur-sm rounded-lg p-2 sm:p-4 border w-full max-w-[320px] mx-auto small:max-w-none small:mx-0" style={{ borderColor: '#0E3E4D30' }} role="listitem">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0E3E4D20' }} aria-hidden="true">
                     <span className="text-base sm:text-lg" style={{ color: '#0E3E4D' }}>⚡</span>
                   </div>
@@ -169,7 +169,7 @@ const Hero = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 bg-white/80 backdrop-blur-sm rounded-lg p-3 sm:p-4 border" style={{ borderColor: '#B5764130' }} role="listitem">
+                <div className="flex items-center space-x-3 bg-white/80 backdrop-blur-sm rounded-lg p-2 sm:p-4 border w-full max-w-[320px] mx-auto small:max-w-none small:mx-0" style={{ borderColor: '#B5764130' }} role="listitem">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#B5764120' }} aria-hidden="true">
                     <span className="text-base sm:text-lg" style={{ color: '#B57641' }}>🎯</span>
                   </div>
@@ -179,13 +179,13 @@ const Hero = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 bg-white/80 backdrop-blur-sm rounded-lg p-3 sm:p-4 border sm:col-span-2 lg:col-span-1" style={{ borderColor: '#0E3E4D30' }} role="listitem">
+                <div className="flex items-center space-x-3 bg-white/80 backdrop-blur-sm rounded-lg p-2 sm:p-4 border w-full max-w-[320px] mx-auto small:max-w-none small:mx-0" style={{ borderColor: '#0E3E4D30' }} role="listitem">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#0E3E4D20' }} aria-hidden="true">
-                    <span className="text-base sm:text-lg" style={{ color: '#0E3E4D' }}>🚚</span>
+                    <span className="text-base sm:text-lg" style={{ color: '#0E3E4D' }}>🛠️</span>
                   </div>
                   <div className="min-w-0">
-                    <div className="font-semibold text-sm sm:text-base" style={{ color: '#0E3E4D' }}>Darmowa dostawa</div>
-                    <div className="text-xs sm:text-sm" style={{ color: '#0E3E4D' }}>Od 200 zł</div>
+                    <div className="font-semibold text-sm sm:text-base" style={{ color: '#0E3E4D' }}>Personalizacja</div>
+                    <div className="text-xs sm:text-sm" style={{ color: '#0E3E4D' }}>Dostosowujemy projekt do Twoich potrzeb</div>
                   </div>
                 </div>
               </div>

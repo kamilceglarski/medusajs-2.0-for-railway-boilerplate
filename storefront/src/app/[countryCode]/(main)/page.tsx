@@ -5,7 +5,7 @@ import Hero from "@modules/home/components/hero"
 import { getCollectionsWithProducts } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 
-import TestimonialsSlider from "@modules/home/components/reviewSection/TestimonialsSlider";
+import ProductCarousel from "@modules/home/components/product-carousel/ProductCarousel";
 import FeaturedCategories from "@modules/home/components/featured-categories"
 import Services from "@modules/home/components/services"
 import FAQ from "@modules/home/components/faq"
@@ -53,8 +53,9 @@ export default async function Home({
       <Hero />
       <FeaturedCategories />
       <Services />
+      <ProductCarousel />
       <FAQ />
-      <TestimonialsSlider />
+      {/* TestimonialsSlider hidden on homepage per request */}
     </>
   )
 }

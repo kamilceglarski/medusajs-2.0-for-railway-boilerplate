@@ -41,7 +41,7 @@ export default function ContactPage() {
                                 </div>
                                 <div>
                                     <div className="text-xs uppercase tracking-wide text-ui-fg-muted">Telefon</div>
-                                    <a href="tel:+48575994767" className="text-ui-fg-interactive underline text-lg">+48 575 994 767</a>
+                                    <a href="tel:+48737268975" className="text-ui-fg-interactive underline text-lg">+48 737 268 975</a>
                                 </div>
                             </div>
 

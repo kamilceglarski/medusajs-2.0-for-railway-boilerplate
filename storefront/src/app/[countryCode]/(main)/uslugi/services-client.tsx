@@ -88,9 +88,9 @@ const ServicesClient = () => {
             description: "100% satysfakcji"
         },
         {
-            icon: <CreditCard className="w-6 h-6" />,
-            title: "Darmowa dostawa",
-            description: "Od 200 zł"
+            icon: <StarSolid className="w-6 h-6" />,
+            title: "Personalizacja na życzenie",
+            description: "Dostosowujemy projekt do Twoich potrzeb — bez dodatkowych opłat"
         },
         {
             icon: <StarSolid className="w-6 h-6" />,

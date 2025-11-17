@@ -31,15 +31,11 @@ export default function CustomerServicePage() {
                             <div>
                                 <h3 className="font-semibold text-lg mb-2" style={{ color: "#0E3E4D" }}>Opcje dostawy</h3>
                                 <ul className="list-disc list-inside space-y-2 ml-2">
-                                    <li><strong>Kurier InPost/DPD</strong> – 1-2 dni robocze, 15 zł</li>
-                                    <li><strong>Paczkomat InPost</strong> – 1-2 dni robocze, 12 zł</li>
+                                    <li><strong>Kurier InPost/DPD</strong> – 1-2 dni robocze, 19,99 zł</li>
+                                    <li><strong>Paczkomat InPost</strong> – 1-2 dni robocze, 16,99 zł</li>
+                                    <li><strong>Pocztex Kurier</strong> – 1-2 dni robocze, 16,00 zł</li>
                                     <li><strong>Odbiór osobisty</strong> – za darmo (po wcześniejszym umówieniu)</li>
                                 </ul>
-                            </div>
-
-                            <div>
-                                <h3 className="font-semibold text-lg mb-2" style={{ color: "#0E3E4D" }}>Darmowa dostawa</h3>
-                                <p>Przy zamówieniach powyżej <strong>200 zł</strong> wysyłka kurierem jest bezpłatna!</p>
                             </div>
                         </div>
                     </section>
@@ -79,7 +75,7 @@ export default function CustomerServicePage() {
 
                             <div>
                                 <h3 className="font-semibold text-lg mb-2" style={{ color: "#0E3E4D" }}>Jak zgłosić zwrot/reklamację?</h3>
-                                <p>Prosimy o zgłoszenie zwrotu lub reklamacji za pomocą naszego <a href="/contact" className="text-ui-fg-interactive underline">formularza kontaktowego</a>. To najprostszy sposób — prosimy opisać problem i dołączyć zdjęcia. Jeśli wolisz, możesz również wysłać e-mail na <a href="mailto:kontakt@lumoria-studio.pl" className="text-ui-fg-interactive underline">kontakt@lumoria-studio.pl</a> lub zadzwonić pod numer <a href="tel:+48575994767" className="text-ui-fg-interactive underline">+48 575 994 767</a>.</p>
+                                <p>Prosimy o zgłoszenie zwrotu lub reklamacji za pomocą naszego <a href="/contact" className="text-ui-fg-interactive underline">formularza kontaktowego</a>. To najprostszy sposób — prosimy opisać problem i dołączyć zdjęcia. Jeśli wolisz, możesz również wysłać e-mail na <a href="mailto:kontakt@lumoria-studio.pl" className="text-ui-fg-interactive underline">kontakt@lumoria-studio.pl</a> lub zadzwonić pod numer <a href="tel:+48737268975" className="text-ui-fg-interactive underline">+48 737 268 975</a>.</p>
                             </div>
                         </div>
                     </section>
