@@ -75,7 +75,7 @@ export default function CustomerServicePage() {
 
                             <div>
                                 <h3 className="font-semibold text-lg mb-2" style={{ color: "#0E3E4D" }}>Jak zgłosić zwrot/reklamację?</h3>
-                                <p>Prosimy o zgłoszenie zwrotu lub reklamacji za pomocą naszego <a href="/contact" className="text-ui-fg-interactive underline">formularza kontaktowego</a>. To najprostszy sposób — prosimy opisać problem i dołączyć zdjęcia. Jeśli wolisz, możesz również wysłać e-mail na <a href="mailto:kontakt@lumoria-studio.pl" className="text-ui-fg-interactive underline">kontakt@lumoria-studio.pl</a> lub zadzwonić pod numer <a href="tel:+48737268975" className="text-ui-fg-interactive underline">+48 737 268 975</a>.</p>
+                                <p>Prosimy o zgłoszenie zwrotu lub reklamacji za pomocą naszego <a href="/contact" className="text-ui-fg-interactive underline">formularza kontaktowego</a>. To najprostszy sposób — prosimy opisać problem i dołączyć zdjęcia. Jeśli wolisz, możesz również wysłać e-mail na <a href="mailto:lumoria@hotmail.com" className="text-ui-fg-interactive underline">lumoria@hotmail.com</a> lub zadzwonić pod numer <a href="tel:+48737268975" className="text-ui-fg-interactive underline">+48 737 268 975</a>.</p>
                             </div>
                         </div>
                     </section>
@@ -92,7 +92,7 @@ export default function CustomerServicePage() {
                                     Czy mogę zamówić produkt z własnym projektem?
                                 </summary>
                                 <p className="mt-2 ml-6 text-ui-fg-subtle">
-                                    Tak! Wyślij nam swój projekt graficzny na adres kontakt@lumoria-studio.pl, a my przygotujemy wycenę i podgląd przed realizacją.
+                                    Tak! Wyślij nam swój projekt graficzny na adres lumoria@hotmail.com, a my przygotujemy wycenę i podgląd przed realizacją.
                                 </p>
                             </details>
 

@@ -26,8 +26,8 @@ export default function ContactPage() {
                                 </div>
                                 <div>
                                     <div className="text-xs uppercase tracking-wide text-ui-fg-muted">Email</div>
-                                    <a href="mailto:kontakt@lumoria-studio.pl" className="text-ui-fg-interactive underline break-all text-lg">
-                                        kontakt@lumoria-studio.pl
+                                    <a href="mailto:lumoria@hotmail.com" className="text-ui-fg-interactive underline break-all text-lg">
+                                        lumoria@hotmail.com
                                     </a>
                                 </div>
                             </div>
